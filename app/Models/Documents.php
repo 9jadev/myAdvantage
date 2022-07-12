@@ -10,8 +10,9 @@ class Documents extends Model
     use HasFactory;
     protected $table = "documents";
     protected $fillable = [
+        "customer_id",
         "status",
         "type",
-        "document_link"
+        "document_link",
     ];
 }

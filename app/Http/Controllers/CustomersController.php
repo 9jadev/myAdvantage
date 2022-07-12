@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Customers\CreateCustomerRequest;
 use App\Http\Requests\Customers\LoginCustomerRequest;
+use App\Http\Requests\Customers\UploadProfileRequest;
 use App\Models\Customers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -91,7 +92,7 @@ class CustomersController extends Controller
         $data = array_merge($data, [
             "status" => "0",
             "customer_id" => "CUS_" . rand(10000, 99999) . date("YmdHis"),
-            "referral_code" => bin2hex(random_bytes(10)),
+            "referral_code" => bin2hex(random_bytes(5)),
             'password' => bcrypt($data['password']),
         ]);
         $customers = Customers::create($data);
@@ -164,9 +165,10 @@ class CustomersController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-
+        $customer->kyc;
         return response()->json([
             'customer' => $customer,
+            "message" => "Customer Login Successfully.",
             'token' => $customer->createToken('mobile', ['role:customer'])->plainTextToken,
         ]);
     }
@@ -195,6 +197,19 @@ class CustomersController extends Controller
         ], 200);
 
     }
+
+    public function uploadProfile(UploadProfileRequest $request)
+    {
+        $data = $request->validated();
+        $customer = auth()->user();
+        $customer->photo_url = $data["photo_url"];
+        return response()->json([
+            "message" => "Customer Profile Updated Successfully.",
+            "customer" => auth()->user(),
+            "status" => "success",
+        ], 200);
+    }
+
     public function getData()
     {
         $id = Auth::id();
@@ -206,6 +221,7 @@ class CustomersController extends Controller
             ], 400);
         }
         $customers = Auth::user();
+        $customers->kyc;
         return response()->json([
             "message" => "Customer Fetched Successfully.",
             "status" => "success",

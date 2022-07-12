@@ -8,23 +8,25 @@ use App\Models\Documents;
 class DocumentsController extends Controller
 {
 
-    //status 0 awaiting , 1 rejected , 2 approved
+    // status 0 awaiting , 1 rejected , 2 approved
+    // type 1 bvn 2 idcard
 
     public function create(SubmitDocumentRequest $request)
     {
         $data = $request->validated();
-        return $this->store($data);
-    }
-
-    private function store($data)
-    {
         $customer = auth()->user();
 
         $data = array_merge($data, [
             "status" => "0",
             "customer_id" => $customer->customer_id,
         ]);
-        $checkcustomer = Documents::where("customer_id", $customer->customer_id)->where("status", "0")->first();
+
+        return $this->store($data);
+    }
+
+    private function store($data)
+    {
+        $checkcustomer = Documents::where("customer_id", $data["customer_id"])->where("status", "0")->first();
         if ($checkcustomer != null) {
             return response()->json([
                 "status" => "error",

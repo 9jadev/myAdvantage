@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Documents as ModelsDocuments;
+use App\models\Kyc;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,6 +19,7 @@ class Customers extends Authenticatable
      * @var array<int, string>
      */
     protected $table = "customers";
+
     protected $fillable = [
         'firstname',
         'lastname',
@@ -28,7 +31,10 @@ class Customers extends Authenticatable
         'email',
         'password',
     ];
-
+    protected $appends = [
+        "checkbvn",
+        "checkid",
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,4 +53,28 @@ class Customers extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function kyc()
+    {
+        return $this->hasOne(Kyc::class, "customer_id", "customer_id");
+    }
+
+    public function getCheckidAttribute()
+    {
+        $checkdocuments = ModelsDocuments::where("customer_id", $this->customer_id)->where("type", "1")->where("status", "1")->first();
+        if (!$checkdocuments) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getCheckbvnAttribute()
+    {
+        $checkdocuments = Documents::where("customer_id", $this->customer_id)->where("type", "0")->where("status", "1")->first();
+        if (!$checkdocuments) {
+            return false;
+        }
+        return true;
+    }
+
 }
