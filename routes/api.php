@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\KycController;
+use App\Http\Controllers\PlansController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [CustomersController::class, 'login']);
         Route::get('profile', [CustomersController::class, 'getData'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);
+        Route::get('verifypayments', [CustomersController::class, 'verifyPayments']);
         Route::post('upload/profile/img', [CustomersController::class, 'uploadProfile'])->middleware(['auth:sanctum', 'type.customer']);
 
         Route::prefix('kyc')->group(function () {
@@ -36,6 +38,12 @@ Route::prefix('v1')->group(function () {
         Route::prefix('documents')->group(function () {
             Route::post('create', [DocumentsController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
         });
+
+    });
+
+    Route::prefix('plans')->group(function () {
+        Route::post('create', [PlansController::class, 'create']);
+        Route::get('list', [PlansController::class, 'index']);
 
     });
 

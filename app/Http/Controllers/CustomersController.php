@@ -6,8 +6,13 @@ use App\Http\Requests\Customers\CreateCustomerRequest;
 use App\Http\Requests\Customers\LoginCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
 use App\Models\Customers;
+use App\Models\Payments;
+use App\Models\Plans;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class CustomersController extends Controller
@@ -84,23 +89,109 @@ class CustomersController extends Controller
     public function create(CreateCustomerRequest $request)
     {
         $data = $request->validated();
+        $checkplan = Plans::where("id", $data["plan_id"])->first();
+        if (!$checkplan) {
+            return response()->json(["status" => "error", "message" => "Invalid Plan"], 400);
+        }
         return $this->store($data);
     }
 
     private function store($data)
-    {
+    {$customer_id = "CUS_" . rand(10000, 99999) . date("YmdHis");
         $data = array_merge($data, [
             "status" => "0",
-            "customer_id" => "CUS_" . rand(10000, 99999) . date("YmdHis"),
+            "customer_id" => $customer_id,
             "referral_code" => bin2hex(random_bytes(5)),
-            'password' => bcrypt($data['password']),
+            // 'password' => bcrypt($data['password']),
         ]);
+        $plan = Plans::where("id", $data["plan_id"])->first();
         $customers = Customers::create($data);
+        $reference = Str::random(15);
+        $payments = Payments::create(["reference" => $reference, "customer_id" => $customer_id]);
         return response()->json([
             "status" => "success",
             "message" => "Created Successfully",
+            "reference" => $reference,
             "customers" => $customers,
+            "plan" => $plan,
+            'token' => $customers->createToken('mobile', ['role:customer'])->plainTextToken,
         ], 200);
+    }
+
+    private function updatepaymentSuccessful(Payments $payment)
+    {
+        $plan = Plans::where("plan_id", $payment->plan_id)->first();
+        $newDateTime = Carbon::now()->addDay($plan->pay_days);
+        $customer = Customers::where("customer_id", $payment->customer_id)->first();
+        $customer->next_pay = $newDateTime;
+        $customer->save();
+        $payment->status = '1';
+        $payment->next_pay = $newDateTime;
+        $payment->save();
+        return response()->json([
+            "message" => "Payment was successful",
+            "status" => "success",
+        ], 200);
+
+    }
+
+    public function verifyPayments()
+    {
+        $ref = request()->ref;
+        if (!$ref) {
+            return response()->json([
+                "message" => "Reference is required",
+                "status" => "error",
+            ], 400);
+        }
+        $payment = Payments::where("reference", $ref)->first();
+        if (!$payment) {
+            return response()->json([
+                "message" => "Reference doesn't exist within our system",
+                "status" => "error",
+            ], 400);
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => "Bearer " . env('FWAVE_PRIVATE_KEY'),
+            ])->get('https://api.flutterwave.com/v3/transactions/' . $ref . '/verify');
+            $responseData = $response->json();
+            if ($responseData["status"] == "error") {
+                return response()->json([
+                    "message" => "Invalid transaction",
+                    "status" => "error",
+                ], 400);
+            }
+
+            if ($responseData["status"] == "success") {
+
+                if (
+                    $responseData['data']['status'] === "successful"
+                    && $responseData['data']['amount'] === $payment->amount
+                    && $responseData['data']['currency'] === "NGN") {
+                    // Success! Confirm the customer's payment
+                    $this->updatepaymentSuccessful($payment);
+                } else {
+                    // Inform the customer their payment was unsuccessful
+                    return response()->json([
+                        "message" => "Invalid transaction",
+                        "status" => "error",
+                    ], 400);
+
+                }
+
+                return response()->json([
+                    "message" => "Invalid transaction",
+                    "status" => "error",
+                ], 400);
+            }
+
+        } catch (\Throwable$th) {
+            throw $th;
+        }
+
     }
 
     /**
