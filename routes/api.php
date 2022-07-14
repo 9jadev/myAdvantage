@@ -26,6 +26,8 @@ Route::prefix('v1')->group(function () {
     Route::prefix('customers')->group(function () {
         Route::post('register', [CustomersController::class, 'create']);
         Route::post('login', [CustomersController::class, 'login']);
+        Route::post('forgotpassword', [CustomersController::class, 'forgotpassword']);
+        Route::post('addpassword', [CustomersController::class, 'addpassword'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('profile', [CustomersController::class, 'getData'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('verifypayments', [CustomersController::class, 'verifyPayments']);

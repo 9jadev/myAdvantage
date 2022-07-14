@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string("id_document")->nullable();
             $table->String('photo_url')->nullable();
             $table->string("password")->nullable();
-
+            $table->dateTime('next_pay')->default(new \DateTime());
             $table->timestamps();
         });
     }

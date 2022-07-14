@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string("plan_id")->nullable();
             $table->string("reference")->nullable();
             $table->integer('amount')->nullable();
-            $table->integer('next_pay')->nullable();
+            $table->dateTime('next_pay')->default(new \DateTime());
+
             $table->string('status')->default("0")->nullable();
             $table->softDeletes();
             $table->timestamps();

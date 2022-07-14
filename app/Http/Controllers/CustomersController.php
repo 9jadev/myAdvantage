@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Customers\CreateCustomerRequest;
+use App\Http\Requests\Customers\CreatePasswordRequest;
 use App\Http\Requests\Customers\LoginCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
+use App\Mail\ForgotPassword;
 use App\Models\Customers;
 use App\Models\Payments;
 use App\Models\Plans;
@@ -12,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -86,6 +89,49 @@ class CustomersController extends Controller
      *
      */
 
+    public function forgotpassword()
+    {
+        $email = request()->input("email");
+        if ($email == null) {
+            return response()->json(["status" => "error", "message" => "Email is required."], 400);
+        }
+        $customer = Customers::where("email", $email)->first();
+        if ($customer == null) {
+            return response()->json(["status" => "error", "message" => "Email is'nt in our system."], 400);
+        }
+        $password = Str::random(10);
+        $customer->password = bcrypt($password);
+        $customer->save();
+        try {
+            Mail::to($email)->send(new ForgotPassword($password));
+        } catch (\Throwable$th) {
+            //log()->error($th);
+        }
+
+        return response()->json([
+            "status" => "success",
+            "message" => "Procced to your email for further insturction",
+        ], 200);
+
+    }
+
+    public function addpassword(CreatePasswordRequest $request)
+    {
+        $data = $request->validated();
+        $customer = Customers::where("email", $data["email"])->first();
+        if ($customer->password != null) {
+            return response()->json(["status" => "error", "message" => "Password already exist"], 400);
+        }
+
+        if ($customer == null) {
+            return response()->json(["status" => "error", "message" => "Email is'nt in our system."], 400);
+        }
+
+        $customer->password = bcrypt($data["password"]);
+        $customer->save();
+        return response()->json(["status" => "success", "message" => "Password added successful"], 200);
+    }
+
     public function create(CreateCustomerRequest $request)
     {
         $data = $request->validated();
@@ -97,7 +143,8 @@ class CustomersController extends Controller
     }
 
     private function store($data)
-    {$customer_id = "CUS_" . rand(10000, 99999) . date("YmdHis");
+    {
+        $customer_id = "CUS_" . rand(10000, 99999) . date("YmdHis");
         $data = array_merge($data, [
             "status" => "0",
             "customer_id" => $customer_id,
