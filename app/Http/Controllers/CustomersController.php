@@ -303,7 +303,7 @@ class CustomersController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-        $customer->kyc;
+        // $customer->kyc;
         return response()->json([
             'customer' => $customer,
             "message" => "Customer Login Successfully.",
