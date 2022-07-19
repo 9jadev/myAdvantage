@@ -8,6 +8,7 @@ use App\Http\Requests\Customers\LoginCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
 use App\Mail\ForgotPassword;
 use App\Models\Customers;
+use App\Models\Kyc;
 use App\Models\Payments;
 use App\Models\Plans;
 use Carbon\Carbon;
@@ -203,8 +204,9 @@ class CustomersController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => "Bearer " . env('FWAVE_PRIVATE_KEY'),
-            ])->get('https://api.flutterwave.com/v3/transactions/' . $ref . '/verify');
+            ])->get('https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=' . $ref);
             $responseData = $response->json();
+            // return $responseData["status"];
             if ($responseData["status"] == "error") {
                 return response()->json([
                     "message" => "Invalid transaction",
@@ -223,10 +225,11 @@ class CustomersController extends Controller
                 } else {
                     // Inform the customer their payment was unsuccessful
                     return response()->json([
-                        "message" => "Invalid transaction",
+                        "message" => "Invalid transaction cco",
+                        "payment" => $payment->amount,
+                        "resp" => $responseData,
                         "status" => "error",
                     ], 400);
-
                 }
 
                 return response()->json([
