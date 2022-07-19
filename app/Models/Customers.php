@@ -32,9 +32,11 @@ class Customers extends Authenticatable
         'status',
         'email',
         'password',
+
     ];
     protected $appends = [
         "checkbvn",
+        "subscripionstatus",
         "checkid",
     ];
     /**
@@ -67,6 +69,11 @@ class Customers extends Authenticatable
         if (!$checkdocuments) {
             return false;
         }
+        return true;
+    }
+
+    public function getSubscripionstatusAttribute()
+    {
         return true;
     }
 

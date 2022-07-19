@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Customers\SubmitDocumentRequest;
 use App\Models\Customers;
 use App\Models\Documents;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentsController extends Controller
 {
 
     // status 0 awaiting , 1 rejected , 2 approved
-    // type 1 bvn 2 idcard
+    // type 0 bvn 1 idcard
 
     public function create(SubmitDocumentRequest $request)
     {
@@ -42,7 +43,8 @@ class DocumentsController extends Controller
 
     public function mackGood($id)
     {
-        $documents = Documents::where('id', $id)->where('type', "2")->first();
+        $admin = Auth::user();
+        $documents = Documents::where('id', $id)->where('status', "0")->first();
         if (!$documents) {
             return response()->json([
                 "message" => "Doesn't exist",
@@ -51,13 +53,13 @@ class DocumentsController extends Controller
         }
 
         $customer = Customers::where("customer_id", $documents->customer_id)->first();
-        if ($documents->type == "1") {
+        if ($documents->type == "0") {
             $customer->update([
                 "bvn" => $documents->document_link,
             ]);
             $customer->save();
         }
-        if ($documents->type == "2") {
+        if ($documents->type == "1") {
             $customer->update([
                 "id_document" => $documents->document_link,
             ]);
@@ -65,6 +67,7 @@ class DocumentsController extends Controller
         }
         $documents->update([
             "status" => '2',
+            "admin_id" => $admin->id,
         ]);
         $documents->save();
         return response()->json([

@@ -13,6 +13,7 @@ class Documents extends Model
         "customer_id",
         "status",
         "type",
+        "admin_id",
         "document_link",
     ];
 }
