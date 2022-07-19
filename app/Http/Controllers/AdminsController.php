@@ -4,9 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Models\Admins;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\ValidationException;
 
 class AdminsController extends Controller
 {
+
+    public function showprofile()
+    {
+        $admin = Auth::user();
+        return response()->json(["status" => "success", "admin" => $admin, "message" => "Admin profile has been fetched."], 200);
+    }
+    public function logout()
+    {
+        $user = request()->user(); //or Auth::user()
+        // Revoke current user token
+        $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
+        return response()->json([
+            "message" => "Admin Logout Successfully.",
+            "status" => "success",
+        ], 200);
+
+    }
+    public function login(Request $request)
+    {
+        $request->validate([
+            "email" => "required|email",
+            "password" => "required|string",
+        ]);
+        $admin = Admins::where('email', $request->email)->first();
+        if (!$admin || !Hash::check($request->password, $admin->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+        return response()->json([
+            'admin' => $admin,
+            "message" => "Admin login successfully.",
+            'token' => $admin->createToken('mobile', ['role:admin'])->plainTextToken,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +75,29 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "firstname" => "required|string",
+            "lastname" => "required|string",
+            "phone_number" => "required|string",
+            "email" => "required|email|unique:admins,email",
+            "password" => "required|string|confirmed",
+        ]);
+        $emailcheck = Admins::where("email", "!=", $request->email)->where("phone_number", "!=", $request->phone_number)->first();
+        if ($emailcheck) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Email and phone number already exist.",
+            ], 400);
+        }
+        $data = $request->all();
+        $data["password"] = bcrypt($data["password"]);
+        $admin = Admins::create($data);
+        return response()->json([
+            "status" => "success",
+            "admin" => $admin,
+            "message" => "Admin created successfully.",
+        ], 200);
+
     }
 
     /**

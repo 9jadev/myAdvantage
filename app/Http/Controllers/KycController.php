@@ -47,7 +47,6 @@ class KycController extends Controller
             "message" => "Created Successfully",
             "kyc" => $kyc,
         ], 200);
-
     }
 
     /**

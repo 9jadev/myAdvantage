@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminsController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\KycController;
@@ -23,6 +24,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::post('/', [AdminsController::class, 'store']);
+        Route::post('/login', [AdminsController::class, 'login']);
+        Route::get('/', [AdminsController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
+        Route::post('/logout', [AdminsController::class, 'logout'])->middleware(['auth:sanctum', 'type.admin']);
+
+        Route::prefix('documents')->group(function () {
+            Route::get('/', [DocumentsController::class, 'admminListDocument'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('/{id}', [DocumentsController::class, 'adminShow'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('approve/{id}', [DocumentsController::class, 'mackGood'])->middleware(['auth:sanctum', 'type.admin']);
+
+        });
+
+    });
     Route::prefix('customers')->group(function () {
         Route::post('register', [CustomersController::class, 'create']);
         Route::post('login', [CustomersController::class, 'login']);
@@ -40,13 +55,11 @@ Route::prefix('v1')->group(function () {
         Route::prefix('documents')->group(function () {
             Route::post('create', [DocumentsController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
         });
-
     });
 
     Route::prefix('plans')->group(function () {
         Route::post('create', [PlansController::class, 'create']);
         Route::get('list', [PlansController::class, 'index']);
-
     });
 
 });

@@ -300,7 +300,13 @@ class CustomersController extends Controller
     {
         $data = $request->validated();
         $customer = Customers::where('email', $request->email)->first();
-
+        if ($customer && !$customer->password) {
+            return response()->json([
+                "message" => "You neet to set a password",
+                "status" => "error",
+                "password" => "required.",
+            ], 400);
+        }
         if (!$customer || !Hash::check($request->password, $customer->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],

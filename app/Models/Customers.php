@@ -27,6 +27,8 @@ class Customers extends Authenticatable
         'upliner',
         'customer_id',
         'referral_code',
+        "id_document",
+        "bvn",
         'status',
         'email',
         'password',
