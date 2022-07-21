@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Customers\CreateCustomerRequest;
 use App\Http\Requests\Customers\CreatePasswordRequest;
 use App\Http\Requests\Customers\LoginCustomerRequest;
+use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
 use App\Mail\ForgotPassword;
 use App\Models\Customers;
@@ -176,6 +177,7 @@ class CustomersController extends Controller
         $payment->status = '1';
         $payment->next_pay = $newDateTime;
         $payment->save();
+        
         return response()->json([
             "message" => "Payment was successful",
             "status" => "success",
@@ -374,5 +376,21 @@ class CustomersController extends Controller
             "status" => "success",
             "customers" => $customers,
         ], 200);
+    }
+
+    public function updateProfile(UpdateCustomerRequest $request)
+    {
+        $data = $request->validated();
+        $customer = auth()->user();
+        // return $customer;
+        $customer->update($data);
+        $customer->refresh();
+        return response()->json([
+            "message" => "Profile updated successfully.",
+            "status" => "success",
+            "customer" => $customer,
+        ]);
+        // $data = array_merge($data, ["customer" => $customer]);
+        // return $data;
     }
 }

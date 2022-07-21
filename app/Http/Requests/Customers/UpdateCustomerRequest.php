@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 
-class CreateCustomerRequest extends FormRequest
+class UpdateCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,14 +27,13 @@ class CreateCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'plan_id' => "required|integer",
             'firstname' => 'required|min:5',
             'lastname' => 'required|min:5',
-            'phone_number' => 'required|string|min:10|unique:customers,phone_number',
-            'referral_code' => 'string|nullable',
-            'email' => 'required|unique:customers,email',
-            'password' => 'required|string|min:8',
-            'password' => 'required|string|min:8|confirmed',
+            'phone_number' => 'required|string',
+            'gender' => 'required|string',
+            'postal_address' => 'required|string',
+            'email' => 'required|email',
+            // 'password' => 'required|string|min:8|confirmed',
         ];
     }
 

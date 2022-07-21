@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Customers\UpdateKycRequest;
 use App\Models\Kyc;
+use App\Services\MyIdService;
 use Illuminate\Http\Request;
 
 class KycController extends Controller
@@ -40,13 +41,24 @@ class KycController extends Controller
         $data = array_merge($data, [
             "customer_id" => auth()->user()->customer_id,
         ]);
-        $kyc = Kyc::create($data);
+        $kyc = Kyc::updateOrCreate($data);
         $kyc->customer;
         return response()->json([
             "status" => "success",
             "message" => "Created Successfully",
             "kyc" => $kyc,
         ], 200);
+    }
+
+    public function verifyBvn(Request $request)
+    {
+        // $request->validate(["bvn" => "required|string"]);
+        if (!$request->bvn) {
+            return response()->json(["message" => "BVN is required", "status" => "error"], 400);
+        }
+        $myId = MyIdService::verify($request->bvn);
+        return response()->json($myId, $myId["status"] ? 200 : 400);
+
     }
 
     /**

@@ -30,14 +30,17 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [AdminsController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
         Route::post('/logout', [AdminsController::class, 'logout'])->middleware(['auth:sanctum', 'type.admin']);
 
+        Route::prefix('kyc')->group(function () {
+            Route::post('/', [KycController::class, 'verifyBvn'])->middleware(['auth:sanctum', 'type.admin']);
+        });
+
         Route::prefix('documents')->group(function () {
             Route::get('/', [DocumentsController::class, 'admminListDocument'])->middleware(['auth:sanctum', 'type.admin']);
             Route::get('/{id}', [DocumentsController::class, 'adminShow'])->middleware(['auth:sanctum', 'type.admin']);
             Route::get('approve/{id}', [DocumentsController::class, 'mackGood'])->middleware(['auth:sanctum', 'type.admin']);
-
         });
-
     });
+
     Route::prefix('customers')->group(function () {
         Route::post('register', [CustomersController::class, 'create']);
         Route::post('login', [CustomersController::class, 'login']);
@@ -46,12 +49,12 @@ Route::prefix('v1')->group(function () {
         Route::get('profile', [CustomersController::class, 'getData'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('verifypayments', [CustomersController::class, 'verifyPayments']);
-        Route::post('upload/profile/img', [CustomersController::class, 'uploadProfile'])->middleware(['auth:sanctum', 'type.customer']);
+        Route::post('update', [CustomersController::class, 'updateProfile'])->middleware(['auth:sanctum', 'type.customer']);
 
+        Route::post('upload/profile/img', [CustomersController::class, 'uploadProfile'])->middleware(['auth:sanctum', 'type.customer']);
         Route::prefix('kyc')->group(function () {
             Route::post('create', [KycController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
         });
-
         Route::prefix('documents')->group(function () {
             Route::post('create', [DocumentsController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
         });

@@ -6,6 +6,8 @@ use App\Http\Requests\Customers\SubmitDocumentRequest;
 use App\Models\Customers;
 use App\Models\Documents;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
 
 class DocumentsController extends Controller
 {
@@ -77,6 +79,8 @@ class DocumentsController extends Controller
         ], 400);
 
     }
+
+    
 
     public function admminListDocument()
     {
