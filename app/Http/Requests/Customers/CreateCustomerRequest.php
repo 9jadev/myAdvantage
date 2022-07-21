@@ -34,7 +34,6 @@ class CreateCustomerRequest extends FormRequest
             'referral_code' => 'string|nullable',
             'email' => 'required|unique:customers,email',
             'password' => 'required|string|min:8',
-            'password' => 'required|string|min:8|confirmed',
         ];
     }
 
