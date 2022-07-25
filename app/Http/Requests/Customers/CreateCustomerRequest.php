@@ -28,8 +28,8 @@ class CreateCustomerRequest extends FormRequest
     {
         return [
             'plan_id' => "required|integer",
-            'firstname' => 'required|min:5',
-            'lastname' => 'required|min:5',
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
             'phone_number' => 'required|string|min:10|unique:customers,phone_number',
             'referral_code' => 'string|nullable',
             'email' => 'required|unique:customers,email',
