@@ -175,6 +175,7 @@ class CustomersController extends Controller
         $customer->next_pay = $newDateTime;
         $customer->save();
         $payment->status = '1';
+        $payment->amount = $plan->plan_amount;
         $payment->next_pay = $newDateTime;
         $payment->save();
 
