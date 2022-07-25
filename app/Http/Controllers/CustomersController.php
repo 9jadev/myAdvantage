@@ -156,7 +156,7 @@ class CustomersController extends Controller
         $plan = Plans::where("id", $data["plan_id"])->first();
         $customers = Customers::create($data);
         $reference = Str::random(15);
-        $payments = Payments::create(["reference" => $reference, "customer_id" => $customer_id, "amount" => $plan->amount]);
+        $payments = Payments::create(["reference" => $reference, "customer_id" => $customer_id, "amount" => $plan->plan_amount, "plan_id" => $data["plan_id"]]);
         return response()->json([
             "status" => "success",
             "message" => "Created Successfully",
@@ -175,7 +175,6 @@ class CustomersController extends Controller
         $customer->next_pay = $newDateTime;
         $customer->save();
         $payment->status = '1';
-        $payment->amount = $plan->plan_amount;
         $payment->next_pay = $newDateTime;
         $payment->save();
 
