@@ -177,7 +177,7 @@ class CustomersController extends Controller
         $payment->status = '1';
         $payment->next_pay = $newDateTime;
         $payment->save();
-        
+
         return response()->json([
             "message" => "Payment was successful",
             "status" => "success",
@@ -223,7 +223,7 @@ class CustomersController extends Controller
                     && $responseData['data']['amount'] === $payment->amount
                     && $responseData['data']['currency'] === "NGN") {
                     // Success! Confirm the customer's payment
-                    $this->updatepaymentSuccessful($payment);
+                    return $this->updatepaymentSuccessful($payment);
                 } else {
                     // Inform the customer their payment was unsuccessful
                     return response()->json([
