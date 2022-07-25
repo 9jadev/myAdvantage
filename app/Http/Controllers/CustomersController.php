@@ -169,7 +169,8 @@ class CustomersController extends Controller
 
     private function updatepaymentSuccessful(Payments $payment)
     {
-        $plan = Plans::where("plan_id", $payment->plan_id)->first();
+        // return $payment;
+        $plan = Plans::where("id", $payment->plan_id)->first();
         $newDateTime = Carbon::now()->addDay($plan->pay_days);
         $customer = Customers::where("customer_id", $payment->customer_id)->first();
         $customer->next_pay = $newDateTime;
