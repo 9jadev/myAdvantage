@@ -4,17 +4,14 @@ namespace App\Models;
 
 use App\Models\Documents as ModelsDocuments;
 use App\Models\Kyc;
-use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Customers extends Authenticatable implements Wallet
+class Customers extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasWallet;
-
+    use HasApiTokens, HasFactory, Notifiable;
     /**
      * The attributes that are mass assignable.
      *
