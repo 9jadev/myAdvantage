@@ -16,6 +16,11 @@ class Payments extends Model
         "plan_id",
         "reference",
         "status",
+        "firstname",
+        "lastname",
+        "image",
+        "bank_name",
+        "bank_account",
     ];
 
     protected $hidden = [

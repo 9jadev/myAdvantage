@@ -13,6 +13,7 @@ use App\Models\Kyc;
 use App\Models\Payments;
 use App\Models\Plans;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -151,7 +152,7 @@ class CustomersController extends Controller
             "status" => "0",
             "customer_id" => $customer_id,
             "referral_code" => bin2hex(random_bytes(5)),
-            // 'password' => bcrypt($data['password']),
+            'password' => bcrypt($data['password']),
         ]);
         $plan = Plans::where("id", $data["plan_id"])->first();
         $customers = Customers::create($data);
@@ -184,6 +185,23 @@ class CustomersController extends Controller
             "status" => "success",
         ], 200);
 
+    }
+
+    public function confirmPayment(Request $request)
+    {
+        $request->validate(["ref" => 'required|string']);
+        $manualpayments = Payments::where("reference", $request->ref)->first();
+        // return $manualpayments;
+        if (!$manualpayments) {
+            return response()->json(["message" => "No payments", "status" => "error"], 400);
+        }
+        if ($manualpayments->status == "1") {
+            return response()->json(["message" => "Payment already completed", "status" => "error"], 400);
+        }
+        $manualpayments->update(["status" => "1"]);
+        $manualpayments->refresh();
+        $this->updatepaymentSuccessful($manualpayments);
+        return response()->json(["message" => "Verifcation success", "status" => "success"], 200);
     }
 
     public function verifyPayments()

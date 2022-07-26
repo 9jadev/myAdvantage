@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminsController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\KycController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PlansController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,12 @@ Route::prefix('v1')->group(function () {
             Route::get('/{id}', [DocumentsController::class, 'adminShow'])->middleware(['auth:sanctum', 'type.admin']);
             Route::get('approve/{id}', [DocumentsController::class, 'mackGood'])->middleware(['auth:sanctum', 'type.admin']);
         });
+
+        Route::prefix('payments')->group(function () {
+            Route::get('manual/verification', [PaymentsController::class, 'listUncompletedMamualPayment'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::post('manual/confirmation', [CustomersController::class, 'confirmPayment'])->middleware(['auth:sanctum', 'type.admin']);
+
+        });
     });
 
     Route::prefix('customers')->group(function () {
@@ -48,7 +55,9 @@ Route::prefix('v1')->group(function () {
         Route::post('addpassword', [CustomersController::class, 'addpassword'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('profile', [CustomersController::class, 'getData'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);
-        Route::get('verifypayments', [CustomersController::class, 'verifyPayments']);
+        Route::get('verifypayments', [CustomersController::class, 'verifyPayments'])->middleware(['auth:sanctum', 'type.customer']);
+        Route::post('manualpayments', [PaymentsController::class, 'manualpayments'])->middleware(['auth:sanctum', 'type.customer']);
+
         Route::post('update', [CustomersController::class, 'updateProfile'])->middleware(['auth:sanctum', 'type.customer']);
 
         Route::post('upload/profile/img', [CustomersController::class, 'uploadProfile'])->middleware(['auth:sanctum', 'type.customer']);
