@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Customers\SubmitDocumentRequest;
 use App\Models\Customers;
 use App\Models\Documents;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class DocumentsController extends Controller
 {
@@ -80,8 +79,6 @@ class DocumentsController extends Controller
 
     }
 
-    
-
     public function admminListDocument()
     {
         $status = request()->input('status');
@@ -108,6 +105,7 @@ class DocumentsController extends Controller
         if ($checkcustomer != null) {
             return response()->json([
                 "status" => "error",
+                "awating" => true,
                 "message" => "Document awaiting approvals",
             ], 400);
 
