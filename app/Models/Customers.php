@@ -39,7 +39,7 @@ class Customers extends Authenticatable
         "checkbvn",
         "subscripionstatus",
         "checkid",
-        "checkyc"
+        "checkyc",
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -65,8 +65,9 @@ class Customers extends Authenticatable
         return $this->hasOne(Kyc::class, "customer_id", "customer_id");
     }
 
-    public function getCheckycAttributes() {
-        return $this->kyc ? true : false;
+    public function getCheckycAttribute()
+    {
+        return $this->kyc != null ? true : false;
     }
 
     public function getCheckidAttribute()
