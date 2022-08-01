@@ -12,6 +12,7 @@ use App\Models\Customers;
 use App\Models\Kyc;
 use App\Models\Payments;
 use App\Models\Plans;
+use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -158,6 +159,7 @@ class CustomersController extends Controller
         $customers = Customers::create($data);
         $reference = Str::random(15);
         $payments = Payments::create(["reference" => $reference, "customer_id" => $customer_id, "amount" => $plan->plan_amount, "plan_id" => $data["plan_id"]]);
+        $this->checkwallet($customers);
         return response()->json([
             "status" => "success",
             "message" => "Created Successfully",
@@ -334,11 +336,17 @@ class CustomersController extends Controller
             ]);
         }
         $customer->kyc;
+        $this->checkwallet($customer);
         return response()->json([
             'customer' => $customer,
             "message" => "Customer Login Successfully.",
             'token' => $customer->createToken('mobile', ['role:customer'])->plainTextToken,
         ]);
+    }
+
+    private function checkwallet(Customers $customer)
+    {
+        $wallet = Wallet::updateOrCreate(["customer_id" => $customer->customer_id]);
     }
 
     /**

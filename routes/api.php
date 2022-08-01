@@ -6,6 +6,7 @@ use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PlansController;
+use App\Http\Controllers\TransactionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,12 @@ Route::prefix('v1')->group(function () {
         Route::prefix('documents')->group(function () {
             Route::post('create', [DocumentsController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
         });
+
+        Route::prefix('wallet')->group(function () {
+            Route::post('fund', [TransactionsController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
+            Route::get('verify', [TransactionsController::class, 'verifyPayments'])->middleware(['auth:sanctum', 'type.customer']);
+        });
+
     });
 
     Route::prefix('plans')->group(function () {

@@ -37,6 +37,7 @@ class Customers extends Authenticatable
     ];
     protected $appends = [
         "checkbvn",
+        "balance",
         "subscripionstatus",
         "checkid",
         "checkyc",
@@ -63,6 +64,11 @@ class Customers extends Authenticatable
     public function kyc()
     {
         return $this->hasOne(Kyc::class, "customer_id", "customer_id");
+    }
+
+    public function getBalanceAttribute()
+    {
+        return Wallet::where("customer_id", $this->customer_id)->first("balance")->balance;
     }
 
     public function getCheckycAttribute()
