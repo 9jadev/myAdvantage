@@ -34,4 +34,12 @@ class PaymentsController extends Controller
         return response()->json(["message" => "Payments Confirmation list", "payments" => $payments, "status" => "success"], 200);
     }
 
+    public function customerPaymentList()
+    {
+        $page_number = request()->input("page_number");
+        $customer = auth()->user();
+        $payments = Payments::where("status", "1")->where("customer_id", $customer->customer_id)->latest()->paginate($page_number);
+        return response()->json(["message" => "Payments list", "payments" => $payments, "status" => "success", "desc" => "status description 0 awating payment , 1 completed 2 canceled"], 200);
+    }
+
 }

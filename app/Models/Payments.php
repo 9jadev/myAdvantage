@@ -10,6 +10,7 @@ class Payments extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = "payments";
+    protected $with = ["plan"];
     protected $fillable = [
         "customer_id",
         "amount",
@@ -26,4 +27,9 @@ class Payments extends Model
     protected $hidden = [
         'deleted_at',
     ];
+
+    public function plan()
+    {
+        return $this->hasOne(Plans::class, "id", "plan_id");
+    }
 }
