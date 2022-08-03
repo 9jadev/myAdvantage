@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Transactions\CreateTransferRequest;
 use App\Models\Transactions;
 use App\Models\Wallet;
+use App\Services\CreateTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class TransactionsController extends Controller
@@ -15,9 +18,12 @@ class TransactionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $page_number = request()->input("page_number");
+        $payments = Transactions::where("status", request()->input("status"))->latest()->paginate($page_number);
+        return response()->json(["message" => "Transactions list", "payments" => $payments, "status" => "success"], 200);
+
     }
 
     /**
@@ -47,6 +53,44 @@ class TransactionsController extends Controller
         return response()->json(["Created Successfully", "status" => "success", "transactions" => $transactions]);
     }
 
+    public function listBanks()
+    {
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => "Bearer " . env('FWAVE_PRIVATE_KEY'),
+            ])->get(env('FWAVE_BASE') . "/banks/NG");
+            $responseData = $response->json();
+            if ($responseData["status"] == "success") {
+                return response()->json([
+                    "message" => "Bank List Fetched Successfully",
+                    "status" => "success",
+                    "banks" => $responseData["data"],
+                ], 200);
+            } else {
+                return response()->json([
+                    "message" => $responseData["message"],
+                    "status" => "error",
+                ], 200);
+            }
+        } catch (\Throwable$th) {
+            Log::error($th);
+            return response()->json([
+                "message" => "Error Occoured",
+                "status" => "error",
+            ], 200);
+        }
+    }
+
+    public function createTransfer(CreateTransferRequest $request, CreateTransaction $createtransaction)
+    {
+        $customer = auth()->user();
+        $reference = Str::random(15);
+        $transaction = Transactions::create(["customer_id" => $customer->customer_id, "amount" => $request->amount, "status" => 0, "type" => "debit", "message" => "Withdraw Fund", "reference" => $reference, "bank_account_name" => $request->bank_account_name, "bank_account_number" => $request->bank_account_number, "bank_account_code" => $request->bank_account_code]);
+        return $createtransaction->generateTransfer($transaction);
+
+    }
+
     public function verifyPayments()
     {
         $ref = request()->ref;
@@ -68,7 +112,7 @@ class TransactionsController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => "Bearer " . env('FWAVE_PRIVATE_KEY'),
-            ])->get('https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=' . $ref);
+            ])->get(env('FWAVE_BASE') . '/transactions/verify_by_reference?tx_ref=' . $ref);
             $responseData = $response->json();
             // return $responseData["status"];
             if ($responseData["status"] == "error") {

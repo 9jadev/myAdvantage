@@ -227,7 +227,7 @@ class CustomersController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => "Bearer " . env('FWAVE_PRIVATE_KEY'),
-            ])->get('https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=' . $ref);
+            ])->get(env("FWAVE_BASE") . '/v3/transactions/verify_by_reference?tx_ref=' . $ref);
             $responseData = $response->json();
             // return $responseData["status"];
             if ($responseData["status"] == "error") {
