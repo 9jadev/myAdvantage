@@ -170,6 +170,17 @@ class CustomersController extends Controller
         ], 200);
     }
 
+    public function generateWallet(Request $request)
+    {
+        $plan = Plans::where("id", $request->plan_id)->first();
+        if ($plan == null) {
+            return response()->json(["status" => "error", "message" => "Plan Id is required"], 400);
+        }
+        $reference = Str::random(15);
+        $payments = Payments::create(["reference" => $reference, "customer_id" => auth()->user()->customer_id, "amount" => $plan->plan_amount, "plan_id" => $request->plan_id]);
+        return response()->json(["payments" => $payments, "message" => "Payment done successfully"], 200);
+    }
+
     private function updatepaymentSuccessful(Payments $payment)
     {
         // return $payment;

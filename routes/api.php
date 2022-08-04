@@ -56,6 +56,8 @@ Route::prefix('v1')->group(function () {
         Route::post('addpassword', [CustomersController::class, 'addpassword'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('profile', [CustomersController::class, 'getData'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);
+        Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);
+
         Route::get('verifypayments', [CustomersController::class, 'verifyPayments'])->middleware(['auth:sanctum', 'type.customer']);
         Route::post('manualpayments', [PaymentsController::class, 'manualpayments'])->middleware(['auth:sanctum', 'type.customer']);
 
@@ -71,6 +73,9 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('payments')->group(function () {
             Route::post('list', [PaymentsController::class, 'customerPaymentList'])->middleware(['auth:sanctum', 'type.customer']);
+
+            Route::post('generatewallet', [CustomersController::class, 'generateWallet'])->middleware(['auth:sanctum', 'type.customer']);
+
         });
 
         Route::prefix('wallet')->group(function () {
