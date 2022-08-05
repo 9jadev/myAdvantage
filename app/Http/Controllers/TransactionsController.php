@@ -93,7 +93,7 @@ class TransactionsController extends Controller
 
     public function paymentWebhook(Request $request)
     {
-        // Log::error($request);
+        Log::error($request);
         return $request;
     }
 
