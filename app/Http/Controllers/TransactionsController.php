@@ -91,6 +91,11 @@ class TransactionsController extends Controller
 
     }
 
+    public function paymentWebhook(Request $request)
+    {
+        Log::error($request);
+    }
+
     public function verifyPayments()
     {
         $ref = request()->ref;
@@ -114,7 +119,7 @@ class TransactionsController extends Controller
                 'Authorization' => "Bearer " . env('FWAVE_PRIVATE_KEY'),
             ])->get(env('FWAVE_BASE') . '/transactions/verify_by_reference?tx_ref=' . $ref);
             $responseData = $response->json();
-            // return $responseData["status"];
+            return $responseData;
             if ($responseData["status"] == "error") {
                 return response()->json([
                     "message" => "Invalid transaction",
