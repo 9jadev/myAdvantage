@@ -99,7 +99,7 @@ class TransactionsController extends Controller
             Log::info(request()->header('verif-hash'));
             return;
         }
-        Log::error(request());
+        Log::error(request()->txRef);
         return request();
     }
 
