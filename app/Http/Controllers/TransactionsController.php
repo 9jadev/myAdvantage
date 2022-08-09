@@ -93,6 +93,7 @@ class TransactionsController extends Controller
 
     public function paymentWebhook(Request $request)
     {
+        Log::success($request->header('verif-hash'));
         Log::error($request);
         return $request;
     }
