@@ -95,11 +95,12 @@ class TransactionsController extends Controller
     {
         // Log::info($request->header('verif-hash'));
         // Log::error($request);
-        if ($request->header('verif-hash') != "1234567890") {
-            Log::info($request->header('verif-hash'));
+        if (request()->header('verif-hash') != "1234567890") {
+            Log::info(request()->header('verif-hash'));
+            return;
         }
-        Log::error($request);
-        return $request;
+        Log::error(request());
+        return request();
     }
 
     public function verifyPayments()
