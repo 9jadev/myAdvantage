@@ -7,6 +7,7 @@ use App\Http\Requests\Customers\CreatePasswordRequest;
 use App\Http\Requests\Customers\LoginCustomerRequest;
 use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
+use App\Jobs\NewbiesJob;
 use App\Mail\ForgotPassword;
 use App\Models\Customers;
 use App\Models\Kyc;
@@ -152,6 +153,8 @@ class CustomersController extends Controller
         $data = array_merge($data, [
             "status" => "0",
             "customer_id" => $customer_id,
+            "level" => "0",
+            "upliner" => $data["referral_code"],
             "referral_code" => bin2hex(random_bytes(5)),
             'password' => bcrypt($data['password']),
         ]);
@@ -160,6 +163,10 @@ class CustomersController extends Controller
         $reference = Str::random(15);
         $payments = Payments::create(["reference" => $reference, "customer_id" => $customer_id, "amount" => $plan->plan_amount, "plan_id" => $data["plan_id"]]);
         $this->checkwallet($customers);
+        $upliner = Customers::where("referral_code", $customers->upliner)->first();
+        if ($upliner) {
+            NewbiesJob::dispatch($upliner)->delay(now()->addMinutes(1));
+        }
         return response()->json([
             "status" => "success",
             "message" => "Created Successfully",
@@ -192,7 +199,10 @@ class CustomersController extends Controller
         $payment->status = '1';
         $payment->next_pay = $newDateTime;
         $payment->save();
-
+        $paymentcount = Payments::where("status", "1")->count();
+        if ($paymentcount == 1) {
+            # code...
+        }
         return response()->json([
             "message" => "Payment was successful",
             "status" => "success",

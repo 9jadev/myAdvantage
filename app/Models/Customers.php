@@ -30,6 +30,7 @@ class Customers extends Authenticatable
         'referral_code',
         "id_document",
         "bvn",
+        "level",
         'status',
         'email',
         'password',
@@ -38,6 +39,7 @@ class Customers extends Authenticatable
     protected $appends = [
         "checkbvn",
         "balance",
+        "customerlevel",
         "subscripionstatus",
         "checkid",
         "checkyc",
@@ -74,6 +76,40 @@ class Customers extends Authenticatable
     public function getCheckycAttribute()
     {
         return $this->kyc != null ? true : false;
+    }
+
+    public function getCustomerlevelAttribute()
+    {
+        // return $this-> != null ? true : false;
+        if ($this->level == "0" || $this->level == null) {
+            return "Newbies";
+        }
+        if ($this->level == "1") {
+            return "Starter";
+        }
+        if ($this->level == "2") {
+            return "Rookie";
+        }
+        if ($this->level == "3") {
+            return "Star";
+        }
+
+        if ($this->level == "4") {
+            return "Bronze";
+        }
+
+        if ($this->level == "5") {
+            return "Silver";
+        }
+
+        if ($this->level == "6") {
+            return "Gold";
+        }
+
+        if ($this->level == "7") {
+            return "Platinum";
+        }
+
     }
 
     public function getCheckidAttribute()
