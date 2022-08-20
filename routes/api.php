@@ -51,7 +51,11 @@ Route::prefix('v1')->group(function () {
             Route::get('', [CustomersController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
             Route::get('{id}', [CustomersController::class, 'viewOne'])->middleware(['auth:sanctum', 'type.admin']);
         });
+        Route::prefix('wallet')->group(function () {
+            Route::get('', [AdminsController::class, 'getWalletLimit'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::post('', [AdminsController::class, 'updateWalletLimit'])->middleware(['auth:sanctum', 'type.admin']);
 
+        });
         Route::prefix('transactions')->group(function () {
             Route::get('', [TransactionsController::class, 'adminList'])->middleware(['auth:sanctum', 'type.admin']);
 

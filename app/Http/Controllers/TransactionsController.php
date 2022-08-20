@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Transactions\CreateTransferRequest;
 use App\Models\Transactions;
 use App\Models\Wallet;
+use App\Models\Walletlimit;
 use App\Services\CreateTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -46,6 +47,10 @@ class TransactionsController extends Controller
     {
         if (!$request->amount) {
             return response()->json(["message" => "Amount is required"]);
+        }
+        $with = Walletlimit::first();
+        if ($request->amount > $with->max_top_up) {
+            return response()->json(["message" => "Amount should be more than " . $with->max_top_up, "status" => "error"], 400);
         }
         return $this->store($request);
     }
@@ -97,6 +102,11 @@ class TransactionsController extends Controller
     {
         $customer = auth()->user();
         $reference = Str::random(15);
+        $with = Walletlimit::first();
+        if ($request->amount > $with->max_withdrawal) {
+            return response()->json(["message" => "Amount should be more than " . $with->max_withdrawal, "status" => "error"], 400);
+        }
+
         $transaction = Transactions::create(["customer_id" => $customer->customer_id, "amount" => $request->amount, "status" => 0, "type" => "debit", "message" => "Withdraw Fund", "reference" => $reference, "bank_account_name" => $request->bank_account_name, "bank_account_number" => $request->bank_account_number, "bank_account_code" => $request->bank_account_code]);
         return $createtransaction->generateTransfer($transaction);
 

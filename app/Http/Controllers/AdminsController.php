@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admins;
+use App\Models\Walletlimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,25 @@ use Illuminate\Validation\ValidationException;
 class AdminsController extends Controller
 {
 
+    public function getWalletLimit()
+    {
+        $with = Walletlimit::first();
+        return response()->json(["status" => "success", "limit" => $with, "message" => "Updated Successfully."], 400);
+    }
+    public function updateWalletLimit(Request $request)
+    {
+        if (!request()->input("max_top_up")) {
+            return response()->json(["status" => "error", "message" => "Maximum Top Up Required."], 400);
+        }
+        if (!request()->input("max_withdrawal")) {
+            return response()->json(["status" => "error", "message" => "Maximum Withdrawals."], 400);
+        }
+        $with = Walletlimit::first();
+        $with->update(["max_top_up" => $request->max_top_up, "max_withdrawal" => $request->max_withdrawal]);
+        $with->save();
+        return response()->json(["status" => "success", "limit" => $with, "message" => "Updated Successfully."], 400);
+
+    }
     public function showprofile()
     {
         $admin = Auth::user();
