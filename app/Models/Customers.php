@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Documents as ModelsDocuments;
 use App\Models\Kyc;
+use App\Models\Payments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,6 +42,7 @@ class Customers extends Authenticatable
         "balance",
         "customerlevel",
         "subscripionstatus",
+        // "downliners",
         "checkid",
         "checkyc",
     ];
@@ -70,7 +72,14 @@ class Customers extends Authenticatable
 
     public function getBalanceAttribute()
     {
-        return Wallet::where("customer_id", $this->customer_id)->first("balance")->balance;
+        return Wallet::where("customer_id", $this->customer_id)->first("balance")->balance ?? 0;
+    }
+
+    public static function getDownliners($referral_code)
+    {
+        // return $this->where("upliner", $this->referral_code)->get();
+        return self::where("upliner", $referral_code)->get();
+
     }
 
     public function getCheckycAttribute()
@@ -133,6 +142,11 @@ class Customers extends Authenticatable
             return false;
         }
         return true;
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payments::class, "customer_id", "customer_id");
     }
 
 }

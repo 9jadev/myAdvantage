@@ -7,6 +7,10 @@ use App\Models\Payments;
 
 class PaymentsController extends Controller
 {
+
+    // public function adminlist() {
+    //     $payments
+    // }
     public function manualpayments(ManualPaymentRequest $request)
     {
         // return $request;
@@ -30,8 +34,14 @@ class PaymentsController extends Controller
     public function listUncompletedMamualPayment()
     {
         $page_number = request()->input("page_number");
-        $payments = Payments::where("status", "2")->latest()->paginate($page_number);
-        return response()->json(["message" => "Payments Confirmation list", "payments" => $payments, "status" => "success"], 200);
+        $type = request()->input("type");
+        // return Payments::where("id", '20')->with('customer')->first();
+        if ($type) {
+            $payments = Payments::where("status", $type)->latest()->with('customer')->paginate($page_number);
+            return response()->json(["message" => "Payments list", "payments" => $payments, "status" => "success", "res" => " 0 expecting payment 1 paid 2 manual payment"], 200);
+        }
+        $payments = Payments::latest()->with('customer')->paginate($page_number);
+        return response()->json(["message" => "Payments list", "payments" => $payments, "status" => "success", "res" => " 0 expecting payment 1 paid 2 manual payment"], 200);
     }
 
     public function customerPaymentList()

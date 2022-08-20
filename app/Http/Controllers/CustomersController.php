@@ -26,6 +26,25 @@ use Illuminate\Validation\ValidationException;
 class CustomersController extends Controller
 {
 
+    public function index()
+    {
+        $page_number = request()->input("page_number");
+        $customers = Customers::latest()->select(["customer_id",
+            "upliner",
+            "referral_code",
+            "firstname",
+            "created_at",
+            "lastname"])->paginate($page_number);
+        return response()->json(["message" => "Customer list", "customer" => $customers, "status" => "success"], 200);
+    }
+
+    public function view()
+    {
+        if (request()->input("customer_id")) {
+
+        }
+    }
+
     /**
      *  @OA\Post(
      *     path="/customers/register",
@@ -400,11 +419,31 @@ class CustomersController extends Controller
         $data = $request->validated();
         $customer = auth()->user();
         $customer->photo_url = $data["photo_url"];
+        $customer->save();
         return response()->json([
             "message" => "Customer Profile Updated Successfully.",
             "customer" => auth()->user(),
             "status" => "success",
         ], 200);
+    }
+
+    public function viewOne($id)
+    {
+        $customers = Customers::where('id', $id)->first();
+        if ($customers == null) {
+            return response()->json([
+                "message" => "Customer Doesn't exist.",
+                "status" => "error",
+            ], 400);
+        }
+        $customers->kyc;
+        $customers->downliners = $customers->getDownliners($customers->referral_code);
+        return response()->json([
+            "message" => "Customer Fetched Successfully.",
+            "status" => "success",
+            "customer" => $customers,
+        ], 200);
+
     }
 
     public function getData()
@@ -419,6 +458,7 @@ class CustomersController extends Controller
         }
         $customers = Auth::user();
         $customers->kyc;
+        $customer->downliners = $customer->getDownliners($customers->referral_code);
         return response()->json([
             "message" => "Customer Fetched Successfully.",
             "status" => "success",

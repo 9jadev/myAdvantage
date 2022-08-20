@@ -45,6 +45,15 @@ Route::prefix('v1')->group(function () {
         Route::prefix('payments')->group(function () {
             Route::get('manual/verification', [PaymentsController::class, 'listUncompletedMamualPayment'])->middleware(['auth:sanctum', 'type.admin']);
             Route::post('manual/confirmation', [CustomersController::class, 'confirmPayment'])->middleware(['auth:sanctum', 'type.admin']);
+        });
+
+        Route::prefix('customers')->group(function () {
+            Route::get('', [CustomersController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('{id}', [CustomersController::class, 'viewOne'])->middleware(['auth:sanctum', 'type.admin']);
+        });
+
+        Route::prefix('transactions')->group(function () {
+            Route::get('', [TransactionsController::class, 'adminList'])->middleware(['auth:sanctum', 'type.admin']);
 
         });
     });
