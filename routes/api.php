@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminsController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
+use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PlansController;
@@ -34,6 +35,12 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('kyc')->group(function () {
             Route::post('/', [KycController::class, 'verifyBvn'])->middleware(['auth:sanctum', 'type.admin']);
+        });
+
+        Route::prefix('faq')->group(function () {
+            Route::post('', [FaqsController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('', [FaqsController::class, 'index']);
+            Route::post('edit', [FaqsController::class, 'edit'])->middleware(['auth:sanctum', 'type.admin']);
         });
 
         Route::prefix('documents')->group(function () {
