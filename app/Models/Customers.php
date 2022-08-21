@@ -42,7 +42,7 @@ class Customers extends Authenticatable
         "balance",
         "customerlevel",
         "subscripionstatus",
-        // "downliners",
+        "downlinerscount",
         "checkid",
         "checkyc",
     ];
@@ -73,6 +73,11 @@ class Customers extends Authenticatable
     public function getBalanceAttribute()
     {
         return Wallet::where("customer_id", $this->customer_id)->first("balance")->balance ?? 0;
+    }
+
+    public function getDownlinerscountAttribute()
+    {
+        return Customers::where("upliner", $this->referral_code)->count();
     }
 
     public static function getDownliners($referral_code)
