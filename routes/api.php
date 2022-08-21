@@ -32,6 +32,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/login', [AdminsController::class, 'login']);
         Route::get('/', [AdminsController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
         Route::post('/logout', [AdminsController::class, 'logout'])->middleware(['auth:sanctum', 'type.admin']);
+        Route::get('/dashboard', [AdminsController::class, 'dashboard'])->middleware(['auth:sanctum', 'type.admin']);
 
         Route::prefix('kyc')->group(function () {
             Route::post('/', [KycController::class, 'verifyBvn'])->middleware(['auth:sanctum', 'type.admin']);

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admins;
+use App\Models\Customers;
+use App\Models\Payments;
+use App\Models\Transactions;
 use App\Models\Walletlimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +15,44 @@ use Illuminate\Validation\ValidationException;
 
 class AdminsController extends Controller
 {
+    public function dashboard()
+    {
+        return response()->json([
+            "total_members" => $this->totalMember(),
+            "total_income" => $this->totalIncome(),
+            "total_payout" => $this->totalPayout(),
+            "newbies_count" => $this->customerTypes(0),
+            "starter_count" => $this->customerTypes(1),
+            "rookie_count" => $this->customerTypes(2),
+            "star_count" => $this->customerTypes(3),
+            "bronze_count" => $this->customerTypes(4),
+            "silver_count" => $this->customerTypes(5),
+            "gold_count" => $this->customerTypes(6),
+            "platinum_count" => $this->customerTypes(7),
+        ], 200);
+    }
+
+    private function customerTypes($status)
+    {
+        return Customers::where('level', $status)->count();
+    }
+    private function totalPayout()
+    {
+        $transactions = Transactions::where("type", "debit")->sum("amount");
+        return $transactions;
+    }
+
+    private function totalMember()
+    {
+        $customer = Customers::count();
+        return $customer;
+    }
+
+    private function totalIncome()
+    {
+        $payments = Payments::where("status", '1')->sum("amount");
+        return $payments;
+    }
 
     public function getWalletLimit()
     {
@@ -99,6 +140,7 @@ class AdminsController extends Controller
             "firstname" => "required|string",
             "lastname" => "required|string",
             "phone_number" => "required|string",
+            "admin_type" => "required|string",
             "email" => "required|email|unique:admins,email",
             "password" => "required|string|confirmed",
         ]);
