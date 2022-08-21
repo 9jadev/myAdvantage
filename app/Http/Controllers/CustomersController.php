@@ -31,6 +31,7 @@ class CustomersController extends Controller
         $page_number = request()->input("page_number");
         $customers = Customers::latest()->select(["customer_id",
             "upliner",
+            "id",
             "referral_code",
             "firstname",
             "created_at",
