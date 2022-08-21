@@ -22,8 +22,9 @@ class TransactionsController extends Controller
     public function index(Request $request)
     {
         $page_number = request()->input("page_number");
-        $payments = Transactions::where("customer_id", auth()->user("customer_id"))->where("status", request()->input("status"))->latest()->paginate($page_number);
-        return response()->json(["message" => "Transactions list", "payments" => $payments, "status" => "success"], 200);
+
+        $payments = Transactions::where("customer_id", auth()->user()->customer_id)->latest()->paginate($page_number);
+        return response()->json(["message" => "Transactions list", "payments" => $payments, "status" => "success", "res" => "0  not completed 1 competed"], 200);
     }
 
     public function adminList()
