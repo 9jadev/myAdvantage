@@ -34,6 +34,7 @@ class CustomersController extends Controller
             "referral_code",
             "firstname",
             "created_at",
+            "phone_number"
             "lastname"])->paginate($page_number);
         return response()->json(["message" => "Customer list", "customer" => $customers, "status" => "success"], 200);
     }
