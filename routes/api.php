@@ -31,6 +31,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/', [AdminsController::class, 'store']);
         Route::post('/login', [AdminsController::class, 'login']);
         Route::get('/', [AdminsController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
+        Route::get('/list', [AdminsController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
+
         Route::post('/logout', [AdminsController::class, 'logout'])->middleware(['auth:sanctum', 'type.admin']);
         Route::get('/dashboard', [AdminsController::class, 'dashboard'])->middleware(['auth:sanctum', 'type.admin']);
 

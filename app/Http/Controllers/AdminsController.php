@@ -115,7 +115,13 @@ class AdminsController extends Controller
      */
     public function index()
     {
-        //
+        $admins = Admins::latest()->paginate(request()->input("page_number"));
+        return response()->json([
+            "status" => "success",
+            "message" => "Admin Fetched Successfully",
+            "admins" => $admins,
+        ], 200);
+
     }
 
     /**
