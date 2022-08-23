@@ -269,9 +269,10 @@ class CustomersController extends Controller
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => "Bearer " . env('FWAVE_PRIVATE_KEY'),
-            ])->get(env("FWAVE_BASE") . '/v3/transactions/verify_by_reference?tx_ref=' . $ref);
+            ])->get(env("FWAVE_BASE") . '/transactions/verify_by_reference?tx_ref=' . $ref);
             $responseData = $response->json();
-            // return $responseData["status"];
+            // return 12324;
+            // return $responseData;
             if ($responseData["status"] == "error") {
                 return response()->json([
                     "message" => "Invalid transaction",
