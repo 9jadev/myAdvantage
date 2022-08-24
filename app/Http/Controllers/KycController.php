@@ -42,6 +42,7 @@ class KycController extends Controller
             "customer_id" => auth()->user()->customer_id,
         ]);
         $kyc = Kyc::updateOrCreate($data);
+        $kyc->save();
         $kyc->customer;
         return response()->json([
             "status" => "success",
