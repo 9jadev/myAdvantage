@@ -41,7 +41,9 @@ class KycController extends Controller
         $data = array_merge($data, [
             "customer_id" => auth()->user()->customer_id,
         ]);
-        $kyc = Kyc::updateOrCreate($data);
+        $kyc = Kyc::updateOrCreate([
+            "customer_id" => auth()->user()->customer_id,
+        ],$data);
         $kyc->save();
         $kyc->customer;
         return response()->json([
