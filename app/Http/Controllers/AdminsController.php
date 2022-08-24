@@ -70,7 +70,7 @@ class AdminsController extends Controller
         $with = Walletlimit::first();
         $with->update(["max_top_up" => $request->max_top_up, "max_withdrawal" => $request->max_withdrawal]);
         $with->save();
-        return response()->json(["status" => "success", "limit" => $with, "message" => "Updated Successfully."], 400);
+        return response()->json(["status" => "success", "limit" => $with, "message" => "Updated Successfully."], 200);
 
     }
     public function showprofile()
@@ -150,16 +150,15 @@ class AdminsController extends Controller
             "email" => "required|email|unique:admins,email",
             "password" => "required|string|confirmed",
         ]);
-        $emailcheck = Admins::where("email", "!=", $request->email)->where("phone_number", "!=", $request->phone_number)->first();
-        if ($emailcheck) {
-            return response()->json([
-                "status" => "error",
-                "message" => "Email and phone number already exist.",
-            ], 400);
-        }
-        $data = $request->all();
-        $data["password"] = bcrypt($data["password"]);
-        $admin = Admins::create($data);
+
+        $admin = Admins::create([
+            "firstname" => $request->firstname,
+            "lastname" => $request->lastname,
+            "phone_number" => $request->phone_number,
+            "email" => $request->phone_number,
+            "email" => $request->email,
+            "password" => bcrypt($request->password),
+        ]);
         return response()->json([
             "status" => "success",
             "admin" => $admin,
@@ -174,9 +173,13 @@ class AdminsController extends Controller
      * @param  \App\Models\Admins  $admins
      * @return \Illuminate\Http\Response
      */
-    public function show(Admins $admins)
+    public function show($id)
     {
-        //
+        $admin = Admins::where("id", $id)->first();
+        if ($admin == null) {
+            return response()->json(["message" => "Admin doesn't exist.", "status" => "error", "admin" => $admin], 400);
+        }
+        return response()->json(["message" => "Admin fetched success.", "status" => "success", "admin" => $admin], 200);
     }
 
     /**
@@ -197,9 +200,37 @@ class AdminsController extends Controller
      * @param  \App\Models\Admins  $admins
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admins $admins)
+    public function update(Request $request, $id)
     {
-        //
+        $admin = Admins::where("id", $id)->first();
+        if ($admin == null) {
+            return response()->json(["message" => "Admin doesn't exist.", "status" => "error", "admin" => $admin], 400);
+        }
+
+        $request->validate([
+            "firstname" => "required|string",
+            "lastname" => "required|string",
+            "phone_number" => "required|string",
+            "admin_type" => "required|string",
+            "email" => "required|email",
+        ]);
+        // return $admin;
+        $checkmail = Admins::where("email", $request->email)->where("id", "!=", $id)->first();
+        if ($checkmail) {
+            return response()->json(["message" => "Admin email exist already.", "status" => "error", "admin" => $admin], 400);
+        }
+        $admin->update([
+            "firstname" => $request->firstname,
+            "lastname" => $request->lastname,
+            "phone_number" => $request->phone_number,
+            "admin_type" => $request->admin_type,
+            "email" => $request->phone_number,
+            "email" => $request->email,
+        ]);
+        $admin->save();
+
+        return response()->json(["message" => "Admin updated successfully", "status" => "success", "admin" => $admin], 200);
+
     }
 
     /**
@@ -208,8 +239,14 @@ class AdminsController extends Controller
      * @param  \App\Models\Admins  $admins
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Admins $admins)
+    public function destroy($id)
     {
-        //
+        $admin = Admins::where("id", $id)->first();
+        if ($admin == null) {
+            return response()->json(["message" => "Admin doesn't exist.", "status" => "error", "admin" => $admin], 400);
+        }
+        $admin->delete();
+        return response()->json(["message" => "Admin deleted successfully.", "status" => "success"], 400);
+
     }
 }

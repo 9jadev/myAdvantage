@@ -54,9 +54,15 @@ class FaqsController extends Controller
      * @param  \App\Models\Faqs  $faqs
      * @return \Illuminate\Http\Response
      */
-    public function show(Faqs $faqs)
+    public function show($id)
     {
-        //
+        $faq = Faqs::where("id", $id)->first();
+        if ($faq == null) {
+            return response()->json(["message" => "Faq doesn't exist.", "status" => "success", "faq" => $faq], 400);
+
+        }
+        return response()->json(["message" => "Faq Fetched.", "status" => "success", "faq" => $faq], 200);
+
     }
 
     /**
@@ -75,7 +81,8 @@ class FaqsController extends Controller
         }
         $faq->update($data);
         $faq->save();
-        return response()->json(["message" => "Faq Success", "status" => "success", "faq" => $faq], 200);
+        $faq->refresh();
+        return response()->json(["message" => "Faq Updated Success", "status" => "success", "faq" => $faq], 200);
     }
 
     /**
@@ -96,8 +103,13 @@ class FaqsController extends Controller
      * @param  \App\Models\Faqs  $faqs
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Faqs $faqs)
+    public function destroy($id)
     {
-        //
+        $faq = Faqs::where("id", $id)->first();
+        if ($faq == null) {
+            return response()->json(["message" => "Faq doesn't exist.", "status" => "success", "faq" => $faq], 400);
+        }
+        $faq->delete();
+        return response()->json(["message" => "Faq Deleted.", "status" => "success"], 200);
     }
 }

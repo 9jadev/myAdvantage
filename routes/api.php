@@ -29,6 +29,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::post('/', [AdminsController::class, 'store']);
+        Route::get('/{id}', [AdminsController::class, 'show']);
+        Route::put('/{id}', [AdminsController::class, 'update']);
+
         Route::post('/login', [AdminsController::class, 'login']);
         Route::get('/', [AdminsController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
         Route::get('/list', [AdminsController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
@@ -42,7 +45,11 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('faq')->group(function () {
             Route::post('', [FaqsController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
+
             Route::get('', [FaqsController::class, 'index']);
+            Route::get('/{id}', [FaqsController::class, 'show'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::delete('/{id}', [FaqsController::class, 'destroy'])->middleware(['auth:sanctum', 'type.admin']);
+
             Route::post('edit', [FaqsController::class, 'edit'])->middleware(['auth:sanctum', 'type.admin']);
         });
 
