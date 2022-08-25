@@ -47,7 +47,7 @@ Route::prefix('v1')->group(function () {
             Route::post('', [FaqsController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
 
             Route::get('', [FaqsController::class, 'index']);
-            Route::get('/{id}', [FaqsController::class, 'show'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('/{id}', [FaqsController::class, 'show']);
             Route::delete('/{id}', [FaqsController::class, 'destroy'])->middleware(['auth:sanctum', 'type.admin']);
 
             Route::post('edit', [FaqsController::class, 'edit'])->middleware(['auth:sanctum', 'type.admin']);
