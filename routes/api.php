@@ -36,7 +36,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{id}', [AdminController::class, 'show']);
         Route::put('/{id}', [AdminController::class, 'update'])->middleware(['auth:sanctum', 'type.admin']);
         Route::post('/login', [AdminController::class, 'login']);
-        Route::get('/', [AdminController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
+        Route::get('/show/profile', [AdminController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
         Route::get('', [AdminController::class, 'index']);
         Route::post('/logout', [AdminController::class, 'logout'])->middleware(['auth:sanctum', 'type.admin']);
         Route::get('/dashboard/app', [AdminController::class, 'dashboard'])->middleware(['auth:sanctum', 'type.admin']);
