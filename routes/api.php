@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminsController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\FaqsController;
@@ -27,29 +27,32 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::post('/sss', function () {
+        return 2321;
+    });
+
     Route::prefix('admin')->group(function () {
-        Route::post('/', [AdminsController::class, 'store']);
-        Route::get('/{id}', [AdminsController::class, 'show']);
-        Route::put('/{id}', [AdminsController::class, 'update']);
-
-        Route::post('/login', [AdminsController::class, 'login']);
-        Route::get('/', [AdminsController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
-        Route::get('/list', [AdminsController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
-
-        Route::post('/logout', [AdminsController::class, 'logout'])->middleware(['auth:sanctum', 'type.admin']);
-        Route::get('/dashboard', [AdminsController::class, 'dashboard'])->middleware(['auth:sanctum', 'type.admin']);
-
+        Route::post('/', [AdminController::class, 'store']);
+        Route::get('/{id}', [AdminController::class, 'show']);
+        Route::put('/{id}', [AdminController::class, 'update'])->middleware(['auth:sanctum', 'type.admin']);
+        Route::post('/login', [AdminController::class, 'login']);
+        Route::get('/', [AdminController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
+        Route::get('', [AdminController::class, 'index']);
+        Route::post('/logout', [AdminController::class, 'logout'])->middleware(['auth:sanctum', 'type.admin']);
+        Route::get('/dashboard/app', [AdminController::class, 'dashboard'])->middleware(['auth:sanctum', 'type.admin']);
         Route::prefix('kyc')->group(function () {
             Route::post('/', [KycController::class, 'verifyBvn'])->middleware(['auth:sanctum', 'type.admin']);
         });
 
+        Route::get('not', [FaqsController::class, function () {
+            return 123456789;
+        }]);
+
         Route::prefix('faq')->group(function () {
             Route::post('', [FaqsController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
-
-            Route::get('', [FaqsController::class, 'index']);
-            Route::get('/{id}', [FaqsController::class, 'show']);
-            Route::delete('/{id}', [FaqsController::class, 'destroy'])->middleware(['auth:sanctum', 'type.admin']);
-
+            Route::get('/list', [FaqsController::class, 'index']);
+            Route::get('{id}', [FaqsController::class, 'show'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::delete('{id}', [FaqsController::class, 'destroy'])->middleware(['auth:sanctum', 'type.admin']);
             Route::post('edit', [FaqsController::class, 'edit'])->middleware(['auth:sanctum', 'type.admin']);
         });
 
@@ -68,9 +71,10 @@ Route::prefix('v1')->group(function () {
             Route::get('', [CustomersController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
             Route::get('{id}', [CustomersController::class, 'viewOne'])->middleware(['auth:sanctum', 'type.admin']);
         });
+
         Route::prefix('wallet')->group(function () {
-            Route::get('', [AdminsController::class, 'getWalletLimit'])->middleware(['auth:sanctum', 'type.admin']);
-            Route::post('', [AdminsController::class, 'updateWalletLimit'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('', [AdminController::class, 'getWalletLimit'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::post('', [AdminController::class, 'updateWalletLimit'])->middleware(['auth:sanctum', 'type.admin']);
 
         });
         Route::prefix('transactions')->group(function () {

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 
-class AdminsController extends Controller
+class AdminController extends Controller
 {
     public function dashboard()
     {
@@ -57,8 +57,9 @@ class AdminsController extends Controller
     public function getWalletLimit()
     {
         $with = Walletlimit::first();
-        return response()->json(["status" => "success", "limit" => $with, "message" => "Updated Successfully."], 400);
+        return response()->json(["status" => "success", "limit" => $with, "message" => "Updated Successfully."], 200);
     }
+
     public function updateWalletLimit(Request $request)
     {
         if (!request()->input("max_top_up")) {
@@ -71,13 +72,14 @@ class AdminsController extends Controller
         $with->update(["max_top_up" => $request->max_top_up, "max_withdrawal" => $request->max_withdrawal]);
         $with->save();
         return response()->json(["status" => "success", "limit" => $with, "message" => "Updated Successfully."], 200);
-
     }
+
     public function showprofile()
     {
         $admin = Auth::user();
         return response()->json(["status" => "success", "admin" => $admin, "message" => "Admin profile has been fetched."], 200);
     }
+
     public function logout()
     {
         $user = request()->user(); //or Auth::user()
@@ -87,8 +89,8 @@ class AdminsController extends Controller
             "message" => "Admin Logout Successfully.",
             "status" => "success",
         ], 200);
-
     }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -105,23 +107,18 @@ class AdminsController extends Controller
             'admin' => $admin,
             "message" => "Admin login successfully.",
             'token' => $admin->createToken('mobile', ['role:admin'])->plainTextToken,
-        ]);
+        ], 200);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        // return 123456789;
         $admins = Admins::latest()->paginate(request()->input("page_number"));
         return response()->json([
             "status" => "success",
             "message" => "Admin Fetched Successfully",
             "admins" => $admins,
         ], 200);
-
     }
 
     /**
@@ -202,11 +199,6 @@ class AdminsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $admin = Admins::where("id", $id)->first();
-        if ($admin == null) {
-            return response()->json(["message" => "Admin doesn't exist.", "status" => "error", "admin" => $admin], 400);
-        }
-
         $request->validate([
             "firstname" => "required|string",
             "lastname" => "required|string",
@@ -214,6 +206,11 @@ class AdminsController extends Controller
             "admin_type" => "required|string",
             "email" => "required|email",
         ]);
+        $admin = Admins::where("id", $id)->first();
+        if ($admin == null) {
+            return response()->json(["message" => "Admin doesn't exist.", "status" => "error", "admin" => $admin], 400);
+        }
+
         // return $admin;
         $checkmail = Admins::where("email", $request->email)->where("id", "!=", $id)->first();
         if ($checkmail) {
@@ -228,9 +225,7 @@ class AdminsController extends Controller
             "email" => $request->email,
         ]);
         $admin->save();
-
         return response()->json(["message" => "Admin updated successfully", "status" => "success", "admin" => $admin], 200);
-
     }
 
     /**
@@ -247,6 +242,5 @@ class AdminsController extends Controller
         }
         $admin->delete();
         return response()->json(["message" => "Admin deleted successfully.", "status" => "success"], 400);
-
     }
 }
