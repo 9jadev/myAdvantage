@@ -152,6 +152,7 @@ class AdminController extends Controller
             "firstname" => $request->firstname,
             "lastname" => $request->lastname,
             "phone_number" => $request->phone_number,
+            "admin_type" => $request->admin_type,
             "email" => $request->phone_number,
             "email" => $request->email,
             "password" => bcrypt($request->password),
