@@ -34,6 +34,8 @@ Route::prefix('v1')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::post('/', [AdminController::class, 'store']);
         Route::get('/{id}', [AdminController::class, 'show']);
+        Route::delete('/{id}', [AdminController::class, 'destroy']);
+
         Route::put('/{id}', [AdminController::class, 'update'])->middleware(['auth:sanctum', 'type.admin']);
         Route::post('/login', [AdminController::class, 'login']);
         Route::get('/show/profile', [AdminController::class, 'showprofile'])->middleware(['auth:sanctum', 'type.admin']);
@@ -68,7 +70,7 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::prefix('customers')->group(function () {
-            Route::get('', [CustomersController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('/list', [CustomersController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
             Route::get('{id}', [CustomersController::class, 'viewOne'])->middleware(['auth:sanctum', 'type.admin']);
         });
 
@@ -78,7 +80,7 @@ Route::prefix('v1')->group(function () {
 
         });
         Route::prefix('transactions')->group(function () {
-            Route::get('', [TransactionsController::class, 'adminList'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('/list', [TransactionsController::class, 'adminList'])->middleware(['auth:sanctum', 'type.admin']);
 
         });
     });
