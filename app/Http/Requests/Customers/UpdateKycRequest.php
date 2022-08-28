@@ -30,7 +30,7 @@ class UpdateKycRequest extends FormRequest
             "nationality" => "required|string",
             "state_of_residence" => "required|string",
             "house_address" => "required|string",
-            "upliner" => "required|string",
+            "upliner" => "nullable|string",
             "community_interest" => "required|string",
             "future_aspiration" => "required|string",
             "discount_preferences" => "required|string",
