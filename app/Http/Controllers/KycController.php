@@ -43,7 +43,40 @@ class KycController extends Controller
         ]);
         $kyc = Kyc::updateOrCreate([
             "customer_id" => auth()->user()->customer_id,
-        ],$data); 
+        ], $data);
+        $kyc->save();
+        $kyc->customer;
+        return response()->json([
+            "status" => "success",
+            "message" => "Created Successfully",
+            "kyc" => $kyc,
+        ], 200);
+    }
+
+    public function create1(UpdateKycRequest $request)
+    {
+        $data = $request->validated();
+        return $this->store1($data);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store1($data)
+    {
+        // return $data;
+        if (!isset($data["customer_id"])) {
+            return response()->json(["status" => "error", "message" => "Customer Id Required"], 400);
+        }
+        $data = array_merge($data, [
+            "customer_id" => $data["customer_id"],
+        ]);
+        $kyc = Kyc::updateOrCreate([
+            "customer_id" => $data["customer_id"],
+        ], $data);
         $kyc->save();
         $kyc->customer;
         return response()->json([

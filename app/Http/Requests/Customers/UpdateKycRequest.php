@@ -27,6 +27,7 @@ class UpdateKycRequest extends FormRequest
     public function rules()
     {
         return [
+            "customer_id" => "nullable|string",
             "nationality" => "required|string",
             "state_of_residence" => "required|string",
             "house_address" => "required|string",

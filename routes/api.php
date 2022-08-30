@@ -46,6 +46,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/', [KycController::class, 'verifyBvn'])->middleware(['auth:sanctum', 'type.admin']);
         });
 
+        Route::prefix('kyc')->group(function () {
+            Route::post('update', [KycController::class, 'create1'])->middleware(['auth:sanctum', 'type.admin']);
+        });
+
         Route::get('not', [FaqsController::class, function () {
             return 123456789;
         }]);
@@ -72,6 +76,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('customers')->group(function () {
             Route::get('/list', [CustomersController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
             Route::get('{id}', [CustomersController::class, 'viewOne'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::post('/update', [CustomersController::class, 'updateProfile1'])->middleware(['auth:sanctum', 'type.admin']);
         });
 
         Route::prefix('wallet')->group(function () {
@@ -90,6 +95,9 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [CustomersController::class, 'login']);
         Route::post('forgotpassword', [CustomersController::class, 'forgotpassword']);
         Route::post('addpassword', [CustomersController::class, 'addpassword'])->middleware(['auth:sanctum', 'type.customer']);
+
+        Route::post('change/password', [CustomersController::class, 'changePassword'])->middleware(['auth:sanctum', 'type.customer']);
+
         Route::get('profile', [CustomersController::class, 'getData'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);
         Route::get('logout', [CustomersController::class, 'logout'])->middleware(['auth:sanctum', 'type.customer']);

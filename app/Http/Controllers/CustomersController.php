@@ -129,7 +129,7 @@ class CustomersController extends Controller
         $password = Str::random(10);
         $customer->password = bcrypt($password);
         $customer->save();
-        
+
         try {
             Mail::to($email)->send(new ForgotPassword($password));
         } catch (\Throwable$th) {
@@ -475,6 +475,47 @@ class CustomersController extends Controller
     {
         $data = $request->validated();
         $customer = auth()->user();
+        // return $customer;
+        $customer->update($data);
+        $customer->refresh();
+        return response()->json([
+            "message" => "Profile updated successfully.",
+            "status" => "success",
+            "customer" => $customer,
+        ]);
+        // $data = array_merge($data, ["customer" => $customer]);
+        // return $data;
+    }
+
+    public function changePassword()
+    {
+        $oldp = request()->input("oldpassword");
+        $newp = request()->input("newpassword");
+        if ($oldp == null) {
+            return response()->json(["status" => "error", "message" => "Old password is required."], 400);
+        }
+        if ($newp == null) {
+            return response()->json(["status" => "error", "message" => "New password is required."], 400);
+        }
+        $customer = Customers::where("id", auth()->user()->id)->first();
+        if (!$customer || !Hash::check($oldp, $customer->password)) {
+            return response()->json(["status" => "error", "message" => "Old password is not correct."], 400);
+        }
+        $customer->password = bcrypt($newp);
+        $customer->save();
+        return response()->json(["status" => "success", "message" => "Password has been changed."], 200);
+    }
+
+    public function updateProfile1(UpdateCustomerRequest $request)
+    {
+
+        $data = $request->validated();
+        // return $data;
+        if (!isset($data["customer_id"])) {
+            return response()->json(["status" => "error", "message" => "Customer Id Required"], 400);
+        }
+
+        $customer = Customers::where("customer_id", $data['customer_id'])->first();
         // return $customer;
         $customer->update($data);
         $customer->refresh();

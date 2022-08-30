@@ -19,4 +19,21 @@ class Admins extends Authenticatable
         "admin_type",
         'password',
     ];
+    protected $appends = [
+        "accesslog",
+    ];
+
+    public function getAccesslogAttribute()
+    {
+        if ($this->admin_type == 0 || $this->admin_type == null) {
+            return ["Dashboard", "Payments", "Members", "Claims & Rewards", "Users Roles", "FAQS"];
+        }
+        if ($this->admin_type == 1) {
+            return ["Dashboard", "Members", "Claims & Rewards", "FAQS"];
+        }
+        if ($this->admin_type == 2) {
+            return ["Dashboard", "FAQS"];
+        }
+
+    }
 }
