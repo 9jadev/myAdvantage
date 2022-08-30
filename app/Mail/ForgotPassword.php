@@ -24,6 +24,6 @@ class ForgotPassword extends Mailable
      */
     public function build()
     {
-        return $this->from('info@myadvantage.com')->subject('Forgot Password')->view('email.forgotpassword');
+        return $this->from('info@myadvantage.africa')->subject('Forgot Password')->view('email.forgotpassword');
     }
 }

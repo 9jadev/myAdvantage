@@ -134,8 +134,8 @@
                   <td align="left" style="font-size:0px;padding:15px 15px 15px 15px;word-break:break-word;">
                     
 					<div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;"><p><span style="font-size: 16px;">Hello,</span></p>
-						<p><br><span style="font-size: 16px;">Bellow is your new password for My Advantage web application</span></p>
-						<p><br><span style="font-size: 16px;">{{$pass}}</span></p>
+						<p><br><span style="font-size: 16px;">Below is your new password for My Advantage web application</span></p>
+						<p><br><span style="font-size: 16px; font-weight: bold;">{{$pass}}</span></p>
 						<p><br><br><span style="font-size: 16px;">For further enquiries, you can reach us at + 01 291 1556</span></p>
 						<p><br><span style="font-size: 16px;">Thanks,</span><br><span style="font-size: 16px;">The My Advantage Team</span></p></div>
                   </td>

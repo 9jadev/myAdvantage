@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -128,10 +129,11 @@ class CustomersController extends Controller
         $password = Str::random(10);
         $customer->password = bcrypt($password);
         $customer->save();
+        
         try {
             Mail::to($email)->send(new ForgotPassword($password));
         } catch (\Throwable$th) {
-            //log()->error($th);
+            Log::error($th);
         }
 
         return response()->json([
