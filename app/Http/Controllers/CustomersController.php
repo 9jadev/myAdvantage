@@ -35,7 +35,7 @@ class CustomersController extends Controller
 
     public function markAllRead()
     {
-        $notification = auth()->user()->unreadNotifications()->markAsRead();
+        $notification = auth()->user()->unreadNotifications->markAsRead();
         return response()->json(["message" => "Notification marked as read", "notification" => $notification, "status" => "success"], 200);
     }
 
