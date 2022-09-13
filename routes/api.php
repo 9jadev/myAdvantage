@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClaimAssigneeController;
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\FaqsController;
@@ -44,6 +46,17 @@ Route::prefix('v1')->group(function () {
         Route::get('/dashboard/app', [AdminController::class, 'dashboard'])->middleware(['auth:sanctum', 'type.admin']);
         Route::prefix('kyc')->group(function () {
             Route::post('/', [KycController::class, 'verifyBvn'])->middleware(['auth:sanctum', 'type.admin']);
+        });
+
+        Route::prefix('claims')->group(function () {
+            Route::post('create', [ClaimController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::get('/list', [ClaimController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
+
+            Route::prefix('assignment')->group(function () {
+                Route::post('create', [ClaimAssigneeController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
+                Route::get('/list', [ClaimAssigneeController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
+
+            });
         });
 
         Route::prefix('kyc')->group(function () {
@@ -91,6 +104,12 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('customers')->group(function () {
+        Route::get('list/notification', [CustomersController::class, 'listNotification'])->middleware(['auth:sanctum', 'type.customer']);
+
+        Route::get('list/notification/marksingle', [CustomersController::class, 'markRead'])->middleware(['auth:sanctum', 'type.customer']);
+
+        Route::get('list/notification/markall', [CustomersController::class, 'markAllRead'])->middleware(['auth:sanctum', 'type.customer']);
+
         Route::post('register', [CustomersController::class, 'create']);
         Route::post('login', [CustomersController::class, 'login']);
         Route::post('forgotpassword', [CustomersController::class, 'forgotpassword']);

@@ -27,6 +27,31 @@ use Illuminate\Validation\ValidationException;
 class CustomersController extends Controller
 {
 
+    public function listNotification()
+    {
+        $notification = auth()->user()->unreadNotifications()->get();
+        return response()->json(["message" => "Notification list", "notification" => $notification, "status" => "success"], 200);
+    }
+
+    public function markAllRead()
+    {
+        $notification = auth()->user()->unreadNotifications()->markAsRead();
+        return response()->json(["message" => "Notification marked as read", "notification" => $notification, "status" => "success"], 200);
+    }
+
+    public function markRead()
+    {
+        $id = request()->input("id");
+        if ($id == null) {
+            return response()->json(["message" => "Id is required", "status" => "error"], 400);
+        }
+        $notification = auth()->user()->unreadNotifications()->where("id", $id)->first();
+        if ($notification) {
+            $notification->markAsRead();
+        }
+        return response()->json(["message" => "Marked as read.", "notification" => $notification, "status" => "success"], 200);
+    }
+
     public function index()
     {
         $page_number = request()->input("page_number");
