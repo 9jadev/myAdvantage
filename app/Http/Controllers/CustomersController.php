@@ -9,6 +9,8 @@ use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
 use App\Jobs\NewbiesJob;
 use App\Mail\ForgotPassword;
+use App\Models\ClaimAssignee;
+use App\Models\ClaimPayment;
 use App\Models\Customers;
 use App\Models\Kyc;
 use App\Models\Payments;
@@ -250,6 +252,15 @@ class CustomersController extends Controller
         $paymentcount = Payments::where("status", "1")->count();
         if ($paymentcount == 1) {
             # code...
+        }
+        $claims = ClaimPayment::where("plan_id", $plan->id)->get();
+        foreach ($claims as $value) {
+            $dd = [
+                "customer_id" => $payment->customer_id,
+                "claim_id" => $value["id"],
+                "status" => 0,
+            ];
+            ClaimAssignee::create($dd);
         }
         return response()->json([
             "message" => "Payment was successful",

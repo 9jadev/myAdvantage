@@ -40,6 +40,29 @@ class ClaimAssigneeController extends Controller
 
     }
 
+    public function indexCustomer()
+    {
+        // $claim = ClaimAssignee::latest()->paginate(request()->input("page_number"));
+        $claim = ClaimAssignee::latest();
+        if (request()->input("status") != null) {
+            $claim->where("status", request()->input("status"));
+        }
+        if (request()->input("claim_id") != null) {
+            $claim->where("claim_id", request()->input("claim_id"));
+        }
+        if (request()->input("id") != null) {
+            $claim->where("id", request()->input("id"));
+        }
+
+        $claim = $claim->where("customer_id", auth()->user()->customer_id)->paginate(request()->input("page_number"));
+        return response()->json([
+            "status" => "success",
+            "message" => "Claim Assignment Fetched Successfully",
+            "claim" => $claim,
+        ], 200);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

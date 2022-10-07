@@ -10,14 +10,21 @@ class Plans extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = "plans";
+    // protected $with = ["claims"];
     protected $fillable = [
         "plan_name",
         "tenor",
         "plan_amount",
-        "pay_days"
+        "pay_days",
     ];
 
     protected $hidden = [
-        'deleted_at'
+        'deleted_at',
     ];
+
+    public function claims()
+    {
+        return $this->hasMany(ClaimPayment::class, 'plan_id', 'id');
+    }
+
 }

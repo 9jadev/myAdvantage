@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 
-class CreatePlanRequest extends FormRequest
+class EditPlanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,12 +27,13 @@ class CreatePlanRequest extends FormRequest
     public function rules()
     {
         return [
+            'plan_id' => 'required|integer|exists:plans,id',
             'plan_name' => 'required|string',
             'tenor' => 'required|string',
             'plan_amount' => 'required|integer',
             'pay_days' => 'required|integer',
-            'claim' => 'required|array',
-            'claim.*' => 'required|integer|exists:claims,id',
+            // 'claim' => 'required|array',
+            // 'claim.*' => 'required|integer|exists:claims,id',
         ];
     }
 

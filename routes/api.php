@@ -55,6 +55,7 @@ Route::prefix('v1')->group(function () {
             Route::prefix('assignment')->group(function () {
                 Route::post('create', [ClaimAssigneeController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
                 Route::get('/list', [ClaimAssigneeController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
+                Route::get('/customerlist', [ClaimAssigneeController::class, 'indexCustomer'])->middleware(['auth:sanctum', 'type.customer']);
 
             });
         });
@@ -158,6 +159,7 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('plans')->group(function () {
         Route::post('create', [PlansController::class, 'create']);
+        Route::post('edit', [PlansController::class, 'edit']);
         Route::get('list', [PlansController::class, 'index']);
     });
 
