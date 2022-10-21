@@ -29,6 +29,7 @@ class CreateClaims extends FormRequest
         return [
             "reward_name" => 'required|string',
             "vendor_name" => 'required|string',
+            "type" => 'required|string',
             "link" => 'required|string',
             "description" => 'required|string',
             "coupon_code" => 'nullable|string',

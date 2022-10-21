@@ -31,6 +31,10 @@ class ClaimAssigneeController extends Controller
             $claim->where("id", request()->input("id"));
         }
 
+        if (request()->input("type") != null) {
+            $claim->where("type", request()->input("type"));
+        }
+
         $claim = $claim->paginate(request()->input("page_number"));
         return response()->json([
             "status" => "success",
@@ -50,6 +54,10 @@ class ClaimAssigneeController extends Controller
         if (request()->input("claim_id") != null) {
             $claim->where("claim_id", request()->input("claim_id"));
         }
+        if (request()->input("type") != null) {
+            $claim->where("type", request()->input("type"));
+        }
+
         if (request()->input("id") != null) {
             $claim->where("id", request()->input("id"));
         }
@@ -58,7 +66,7 @@ class ClaimAssigneeController extends Controller
         return response()->json([
             "status" => "success",
             "message" => "Claim Assignment Fetched Successfully",
-            "claim" => $claim,
+
         ], 200);
 
     }
@@ -85,6 +93,49 @@ class ClaimAssigneeController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function changeStatusAdmin()
+    {
+
+        if (request()->input("id") == null) {
+            return response()->json(["message" => "Id is required.", "status" => "error"], 400);
+        }
+
+        if (request()->input("status") == null) {
+            return response()->json(["message" => "Status is required.", "status" => "error"], 400);
+        }
+
+        $claim = ClaimAssignee::where("id", request()->input("id"))->first();
+        // return $claim;
+        if (!$claim) {
+            return response()->json(["message" => "Claim doesn't exist.", "status" => "error"], 400);
+        }
+
+        $claim->update(["status" => request()->input("status")]);
+        return response()->json(["message" => "Claim updated.", "status" => "success"], 200);
+    }
+
+    public function changeStatusCustomer()
+    {
+        if (request()->input("id") == null) {
+            return response()->json(["message" => "Id is required.", "status" => "error"], 400);
+        }
+
+        if (request()->input("status") == null) {
+            return response()->json(["message" => "Status is required.", "status" => "error"], 400);
+        }
+        // return auth()->user();
+        // return auth()->user()->phone_number;
+
+        $claim = ClaimAssignee::where("id", request()->input("id"))->where('customer_id', auth()->user()->customer_id)->first();
+        // return $claim;
+        if (!$claim) {
+            return response()->json(["message" => "Claim doesn't exist.", "status" => "error"], 400);
+        }
+
+        $claim->update(["status" => request()->input("status")]);
+        return response()->json(["message" => "Claim updated.", "status" => "success"], 200);
     }
 
     /**

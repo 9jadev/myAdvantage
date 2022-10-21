@@ -259,6 +259,7 @@ class CustomersController extends Controller
                 "customer_id" => $payment->customer_id,
                 "claim_id" => $value["id"],
                 "status" => 0,
+                "type" => $value["type"],
             ];
             ClaimAssignee::create($dd);
         }

@@ -56,6 +56,9 @@ Route::prefix('v1')->group(function () {
                 Route::post('create', [ClaimAssigneeController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
                 Route::get('/list', [ClaimAssigneeController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
                 Route::get('/customerlist', [ClaimAssigneeController::class, 'indexCustomer'])->middleware(['auth:sanctum', 'type.customer']);
+                Route::post('/change-status', [ClaimAssigneeController::class, 'changeStatusAdmin'])->middleware(['auth:sanctum', 'type.admin']);
+
+                Route::post('/change-status/customer', [ClaimAssigneeController::class, 'changeStatusCustomer'])->middleware(['auth:sanctum', 'type.customer']);
 
             });
         });

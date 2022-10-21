@@ -28,10 +28,13 @@ class SendAssignClaim
      */
     public function handle(AssignClaim $event)
     {
-        $data = ["claim_id" => $event->claim, "customer_id" => $event->customer];
+
+        $claim = Claim::where("id", $event->claim)->first();
+        $data = ["claim_id" => $event->claim, "customer_id" => $event->customer, "type" => $claim->type];
+
         $createAssign = ClaimAssignee::create($data);
         $customer = Customers::where("customer_id", $event->customer)->first();
-        $claim = Claim::where("id", $event->claim)->first();
+
         $customer->notify((new AssignClaimNotify($claim, $customer))->delay([
             'mail' => now()->addMinutes(2),
             'sms' => now()->addMinutes(3),
