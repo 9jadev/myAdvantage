@@ -15,7 +15,16 @@ class ClaimController extends Controller
      */
     public function index()
     {
-        $claim = Claim::latest()->paginate(request()->input("page_number"));
+        // $claim = Claim::latest()->paginate(request()->input("page_number"));
+        $claim = Claim::latest();
+        if (request()->input("type") != null) {
+            $claim->where("type", request()->input("type"));
+        }
+        if (request()->input("id") != null) {
+            $claim->where("id", request()->input("id"));
+        }
+
+        $claim = $claim->paginate(request()->input("page_number"));
         return response()->json([
             "status" => "success",
             "message" => "Claim Fetched Successfully",
