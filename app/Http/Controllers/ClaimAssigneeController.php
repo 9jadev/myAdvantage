@@ -66,7 +66,7 @@ class ClaimAssigneeController extends Controller
         return response()->json([
             "status" => "success",
             "message" => "Claim Assignment Fetched Successfully",
-
+            "claim" => $claim           
         ], 200);
 
     }
