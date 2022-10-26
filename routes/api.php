@@ -108,6 +108,9 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('customers')->group(function () {
+
+        Route::get('list/downliners', [CustomersController::class, 'loaDowlainers'])->middleware(['auth:sanctum', 'type.customer']);
+
         Route::get('list/notification', [CustomersController::class, 'listNotification'])->middleware(['auth:sanctum', 'type.customer']);
 
         Route::get('list/notification/marksingle', [CustomersController::class, 'markRead'])->middleware(['auth:sanctum', 'type.customer']);

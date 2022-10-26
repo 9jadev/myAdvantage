@@ -564,4 +564,140 @@ class CustomersController extends Controller
         // $data = array_merge($data, ["customer" => $customer]);
         // return $data;
     }
+
+    public function loaDowlainers()
+    {
+        $referral_code = auth()->user()->referral_code;
+        // return auth()->user();
+        $data = [];
+
+        $downliners = Customers::where("upliner", $referral_code)->get(["firstname", "lastname", "referral_code"]);
+        $level2data = $downliners->pluck("referral_code")->all();
+        // return $level2data;
+        $level1 = [
+            "level" => "1",
+            "data" => $downliners,
+        ];
+
+        $level2 = $this->level2($level2data);
+
+        $level3data = $level2["data"]->pluck("referral_code")->all();
+        // return $level3data;
+
+        $level3 = $this->level3($level3data);
+        $level4data = $level3["data"]->pluck("referral_code")->all();
+
+        $level4 = $this->level4($level4data);
+        $level5data = $level4["data"]->pluck("referral_code")->all();
+
+        $level5 = $this->level5($level5data);
+        $level6data = $level5["data"]->pluck("referral_code")->all();
+
+        $level6 = $this->level6($level6data);
+        $level7data = $level6["data"]->pluck("referral_code")->all();
+
+        $level7 = $this->level7($level7data);
+        $level8data = $level7["data"]->pluck("referral_code")->all();
+
+        $level8 = $this->level8($level8data);
+        $level9data = $level7["data"]->pluck("referral_code")->all();
+
+        $level9 = $this->level9($level9data);
+
+        $data[] = $level1;
+        $data[] = $level2;
+        $data[] = $level3;
+        $data[] = $level4;
+        $data[] = $level5;
+        $data[] = $level6;
+        $data[] = $level7;
+        $data[] = $level8;
+        $data[] = $level9;
+        // return $data;
+        return response()->json([
+            "message" => "Tree Generology fetched",
+            "status" => "error",
+            "data" => $data,
+        ], 200);
+    }
+
+    private function level2($level2data)
+    {
+        $downliners = Customers::whereIn("upliner", $level2data)->get(["firstname", "lastname", "referral_code"]);
+        $level2 = [
+            "level" => "2",
+            "data" => $downliners,
+        ];
+        return $level2;
+    }
+
+    private function level3($level3data)
+    {
+        $downliners = Customers::whereIn("upliner", $level3data)->get(["firstname", "lastname", "referral_code"]);
+        $level3 = [
+            "level" => "3",
+            "data" => $downliners,
+        ];
+        return $level3;
+    }
+
+    private function level4($level4data)
+    {
+        $downliners = Customers::whereIn("upliner", $level4data)->get(["firstname", "lastname", "referral_code"]);
+        $level4 = [
+            "level" => "4",
+            "data" => $downliners,
+        ];
+        return $level4;
+    }
+
+    private function level5($level5data)
+    {
+        $downliners = Customers::whereIn("upliner", $level5data)->get(["firstname", "lastname", "referral_code"]);
+        $level5 = [
+            "level" => "5",
+            "data" => $downliners,
+        ];
+        return $level5;
+    }
+
+    private function level6($level6data)
+    {
+        $downliners = Customers::whereIn("upliner", $level6data)->get(["firstname", "lastname", "referral_code"]);
+        $level6 = [
+            "level" => "6",
+            "data" => $downliners,
+        ];
+        return $level6;
+    }
+
+    private function level7($level7data)
+    {
+        $downliners = Customers::whereIn("upliner", $level7data)->get(["firstname", "lastname", "referral_code"]);
+        $level7 = [
+            "level" => "7",
+            "data" => $downliners,
+        ];
+        return $level7;
+    }
+
+    private function level8($level8data)
+    {
+        $downliners = Customers::whereIn("upliner", $level8data)->get(["firstname", "lastname", "referral_code"]);
+        $level8 = [
+            "level" => "8",
+            "data" => $downliners,
+        ];
+        return $level8;
+    }
+
+    private function level9($level9data)
+    {
+        $downliners = Customers::whereIn("upliner", $level9data)->get(["firstname", "lastname", "referral_code"]);
+        $level9 = [
+            "level" => "9",
+            "data" => $downliners,
+        ];
+        return $level9;
+    }
 }
