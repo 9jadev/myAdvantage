@@ -30,6 +30,7 @@ class CreatePlanRequest extends FormRequest
             'plan_name' => 'required|string',
             'tenor' => 'required|string',
             'plan_amount' => 'required|integer',
+            'mlm' => 'nullable|boolean',
             'pay_days' => 'required|integer',
             'claim' => 'required|array',
             'claim.*' => 'required|integer|exists:claims,id',

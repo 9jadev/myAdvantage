@@ -13,7 +13,7 @@ class ClaimAssignee extends Model
 
     protected $table = "claim_assignees";
     protected $guarded = [];
-    protected $hidden = ['deleted_at', 'status'];
+    protected $hidden = ['deleted_at'];
     protected $with = ["customer", "claims"];
 
     public function customer()

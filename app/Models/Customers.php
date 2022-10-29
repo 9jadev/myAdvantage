@@ -47,6 +47,7 @@ class Customers extends Authenticatable
         "downlinerscount",
         "checkid",
         "checkyc",
+        "checkmln",
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -92,6 +93,15 @@ class Customers extends Authenticatable
     public function getCheckycAttribute()
     {
         return $this->kyc != null ? true : false;
+    }
+
+    public function getCheckmlnAttribute()
+    {
+        $checkMlm = Payments::where("customer_id", $this->customer_id)->latest()->first();
+        if ($checkMlm?->plan?->mlm) {
+            return true;
+        }
+        return false;
     }
 
     public function getCustomerlevelAttribute()
