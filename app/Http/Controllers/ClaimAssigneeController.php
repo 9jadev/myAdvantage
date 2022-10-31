@@ -66,7 +66,7 @@ class ClaimAssigneeController extends Controller
         return response()->json([
             "status" => "success",
             "message" => "Claim Assignment Fetched Successfully",
-            "claim" => $claim           
+            "claim" => $claim,
         ], 200);
 
     }
@@ -113,6 +113,7 @@ class ClaimAssigneeController extends Controller
         }
 
         $claim->update(["status" => request()->input("status")]);
+        $claim->save();
         return response()->json(["message" => "Claim updated.", "status" => "success"], 200);
     }
 
