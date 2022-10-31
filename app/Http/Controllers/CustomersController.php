@@ -9,6 +9,7 @@ use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
 use App\Jobs\NewbiesJob;
 use App\Mail\ForgotPassword;
+use App\Models\Claim;
 use App\Models\ClaimAssignee;
 use App\Models\ClaimPayment;
 use App\Models\Customers;
@@ -16,6 +17,7 @@ use App\Models\Kyc;
 use App\Models\Payments;
 use App\Models\Plans;
 use App\Models\Wallet;
+use App\Notifications\AssignClaimNotify;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -263,6 +265,15 @@ class CustomersController extends Controller
                 "type" => $value->claim->type,
             ];
             ClaimAssignee::create($dd);
+            // event(new AssignClaimEvent(auth()->user()->customer_id, $dd["claim_id"]));
+
+            $claim = Claim::where("id", $value["id"])->first();
+
+            auth()->user()->notify((new AssignClaimNotify($claim, auth()->user()))->delay([
+                'mail' => now()->addMinutes(2),
+                'sms' => now()->addMinutes(3),
+            ]));
+
         }
         return response()->json([
             "message" => "Payment was successful",
