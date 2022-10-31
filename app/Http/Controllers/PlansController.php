@@ -6,6 +6,7 @@ use App\Http\Requests\Plans\CreatePlanRequest;
 use App\Http\Requests\Plans\EditPlanRequest;
 use App\Models\ClaimPayment;
 use App\Models\Plans;
+use App\Models\Claim;
 
 class PlansController extends Controller
 {
@@ -44,9 +45,11 @@ class PlansController extends Controller
     {
         $plan = Plans::create($data);
         foreach ($data["claim"] as $value) {
+            $claim = Claim::where("id", $value["id"])->first();
             $datavalue = [
                 "claim_id" => $value,
                 "plan_id" => $plan->id,
+                "type" => $claim->type
             ];
             ClaimPayment::create($datavalue);
         }

@@ -195,6 +195,7 @@ class TransactionsController extends Controller
             "balance" => $balance,
         ]);
         $wallet->save();
+        
         return response()->json([
             "message" => "Payment was successful",
             "status" => "success",

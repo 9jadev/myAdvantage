@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("claim_id")->nullable();
             $table->string("plan_id")->nullable();
             $table->string("status")->nullable();
+            $table->string("type")->nullable();
             $table->timestamps();
         });
     }

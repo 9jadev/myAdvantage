@@ -253,13 +253,14 @@ class CustomersController extends Controller
         if ($paymentcount == 1) {
             # code...
         }
-        $claims = ClaimPayment::where("plan_id", $plan->id)->get();
+        $claims = ClaimPayment::where("plan_id", $payment->plan_id)->get();
+        // return $claims;
         foreach ($claims as $value) {
             $dd = [
                 "customer_id" => $payment->customer_id,
                 "claim_id" => $value["id"],
                 "status" => 0,
-                "type" => $value["type"],
+                "type" => $value->claim->type,
             ];
             ClaimAssignee::create($dd);
         }
@@ -278,6 +279,11 @@ class CustomersController extends Controller
         if (!$manualpayments) {
             return response()->json(["message" => "No payments", "status" => "error"], 400);
         }
+
+        if ($manualpayments->status == "1") {
+            return response()->json(["message" => "Payment Already Verified", "status" => "error"], 400);
+        }
+
         if ($manualpayments->status == "1") {
             return response()->json(["message" => "Payment already completed", "status" => "error"], 400);
         }
@@ -303,6 +309,13 @@ class CustomersController extends Controller
                 "status" => "error",
             ], 400);
         }
+
+        if ($payment->status == '1') {
+            return response()->json(["message" => "Payment Already Verified", "status" => "error"], 400);
+
+        }
+
+        // return $payment;
 
         try {
             $response = Http::withHeaders([
