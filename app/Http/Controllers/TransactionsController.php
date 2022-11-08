@@ -142,6 +142,13 @@ class TransactionsController extends Controller
             ], 400);
         }
 
+        if ($payment->status == "1") {
+            return response()->json([
+                "message" => "Transaction already completed.",
+                "status" => "error",
+            ], 400);
+        }
+
         try {
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -167,7 +174,7 @@ class TransactionsController extends Controller
                 } else {
                     // Inform the customer their payment was unsuccessful
                     return response()->json([
-                        "message" => "Invalid transaction cco",
+                        "message" => "Invalid transaction",
                         "payment" => $payment->amount,
                         "resp" => $responseData,
                         "status" => "error",
