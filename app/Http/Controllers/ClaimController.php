@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Claims\CreateClaims;
+use App\Http\Requests\Claims\EditClaimRequest;
 use App\Models\Claim;
+use App\Models\ClaimAssignee;
 use Illuminate\Http\Request;
 
 class ClaimController extends Controller
@@ -72,9 +74,21 @@ class ClaimController extends Controller
      * @param  \App\Models\Claim  $claim
      * @return \Illuminate\Http\Response
      */
-    public function edit(Claim $claim)
+    public function edit(EditClaimRequest $request)
     {
-        //
+        $data = $request->validated();
+        $claim = Claim::where("id", $data["id"])->first();
+        $claim->updateOrCreate(
+            ['id' => $data["id"]],
+            $data
+        );
+        $claim->refresh();
+        return response()->json([
+            "message" => "Claim updated successfully",
+            "status" => "success",
+            "data" => $claim,
+        ]);
+
     }
 
     /**
@@ -95,8 +109,33 @@ class ClaimController extends Controller
      * @param  \App\Models\Claim  $claim
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Claim $claim)
+    public function destroy($claimid)
     {
-        //
+        $claim = Claim::where("id", $claimid)->first();
+        if (!$claim) {
+            return response()->json([
+                "message" => "Claim does not exist",
+                "status" => "error",
+            ]);
+        }
+        $claimassignee = ClaimAssignee::where("claim_id", $claimid)->count();
+        if (!$claim || $claim->level != null) {
+            return response()->json([
+                "message" => "Claim does not exist",
+                "status" => "error",
+            ]);
+        }
+
+        if ($claimassignee != 0) {
+            return response()->json([
+                "message" => "Claim already assigned to member",
+                "status" => "error",
+            ]);
+        }
+        $claim->delete();
+        return response()->json([
+            "message" => "Claim deleted successfully",
+            "status" => "success",
+        ]);
     }
 }

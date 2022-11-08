@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Events\AssignClaim as AssignClaimEvent;
+use App\Jobs\SilverJob;
+use App\Models\Claim;
 use App\Models\Customers;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,7 +12,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\SilverJob;
 
 class BronzeJob implements ShouldQueue
 {
@@ -42,6 +44,9 @@ class BronzeJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
+
+            $claim = Claim::where("level", '4')->first();
+            event(new AssignClaimEvent($this->customer->id, $claim->id));
 
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

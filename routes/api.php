@@ -50,6 +50,11 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('claims')->group(function () {
             Route::post('create', [ClaimController::class, 'create'])->middleware(['auth:sanctum', 'type.admin']);
+            Route::put('edit', [ClaimController::class, 'edit'])->middleware(['auth:sanctum', 'type.admin']);
+
+            Route::destroy('delete/{claimid}', [ClaimController::class, 'delete'])->middleware(['auth:sanctum', 'type.admin']);
+
+
             Route::get('/list', [ClaimController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
 
             Route::prefix('assignment')->group(function () {

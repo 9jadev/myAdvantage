@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\StarJob;
 use App\Models\Customers;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,8 +10,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\StarJob;
-
+use App\Events\AssignClaim as AssignClaimEvent;
+use App\Models\Claim;
 
 class RookieJob implements ShouldQueue
 {
@@ -43,6 +44,9 @@ class RookieJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
+
+            $claim = Claim::where("level", '2')->first();
+            event(new AssignClaimEvent($this->customer->id, $claim->id));
 
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

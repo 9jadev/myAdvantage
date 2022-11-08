@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 
-class CreateClaims extends FormRequest
+class EditClaimRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,10 @@ class CreateClaims extends FormRequest
     public function rules()
     {
         return [
+            "id" => "required|string|exists:claims,id",
             "reward_name" => 'required|string',
             "vendor_name" => 'required|string',
             "mlm" => "boolean",
-            "level" => "nullable|string||unique:claims,level",
             "type" => 'required|string',
             "link" => 'required|string',
             "description" => 'required|string',

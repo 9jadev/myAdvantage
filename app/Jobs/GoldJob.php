@@ -2,15 +2,16 @@
 
 namespace App\Jobs;
 
+use App\Events\AssignClaim as AssignClaimEvent;
+use App\Jobs\PlatinumJob;
+use App\Models\Claim;
 use App\Models\Customers;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-Use App\Jobs\PlatinumJob;
 
 class GoldJob implements ShouldQueue
 {
@@ -43,6 +44,9 @@ class GoldJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
+
+            $claim = Claim::where("level", '6')->first();
+            event(new AssignClaimEvent($this->customer->id, $claim->id));
 
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

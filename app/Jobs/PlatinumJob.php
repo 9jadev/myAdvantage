@@ -2,9 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Events\AssignClaim as AssignClaimEvent;
+use App\Models\Claim;
 use App\Models\Customers;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,7 +32,7 @@ class PlatinumJob implements ShouldQueue
      *
      * @return void
      */
-   public function handle()
+    public function handle()
     {
         Log::alert("Gold");
         Log::error($this->customer->lastname);
@@ -41,6 +42,10 @@ class PlatinumJob implements ShouldQueue
                 "level" => 7,
             ]);
             $this->customer->save();
+
+            $claim = Claim::where("level", '7')->first();
+            event(new AssignClaimEvent($this->customer->id, $claim->id));
+
             // job upliner of upliner
 
             // $upliner = Customers::where("upliner", $this->customers->upliner)->first();

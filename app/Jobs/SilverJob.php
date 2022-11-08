@@ -10,6 +10,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use App\Models\Claim;
+use App\Events\AssignClaim as AssignClaimEvent;
 
 
 class SilverJob implements ShouldQueue
@@ -43,6 +45,10 @@ class SilverJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
+
+            $claim = Claim::where("level", '5')->first();
+            event(new AssignClaimEvent($this->customer->id, $claim->id));
+
 
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {
