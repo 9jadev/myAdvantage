@@ -45,7 +45,7 @@ class PlansController extends Controller
     {
         $plan = Plans::create($data);
         foreach ($data["claim"] as $value) {
-            $claim = Claim::where("id", $value["id"])->first();
+            $claim = Claim::where("id", $value)->first();
             $datavalue = [
                 "claim_id" => $value,
                 "plan_id" => $plan->id,
