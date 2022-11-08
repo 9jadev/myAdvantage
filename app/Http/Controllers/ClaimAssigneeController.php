@@ -114,7 +114,7 @@ class ClaimAssigneeController extends Controller
 
         $claim->update(["status" => request()->input("status")]);
         $claim->save();
-        return response()->json(["message" => "Claim updated.", "status" => "success"], 200);
+        return response()->json(["message" => "Updated successfully.", "status" => "success"], 200);
     }
 
     public function changeStatusCustomer()

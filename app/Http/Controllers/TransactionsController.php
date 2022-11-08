@@ -189,13 +189,14 @@ class TransactionsController extends Controller
     private function updatepaymentSuccessful(Transactions $transactions)
     {
         // return $payment;
+        $transactions->update(["status" => 1]);
         $wallet = Wallet::where("customer_id", $transactions->customer_id)->first();
         $balance = $wallet->balance + $transactions->amount;
         $wallet->update([
             "balance" => $balance,
         ]);
         $wallet->save();
-        
+
         return response()->json([
             "message" => "Payment was successful",
             "status" => "success",
