@@ -50,7 +50,7 @@ class RookieJob implements ShouldQueue
 
             if($this->customer->checkmln) {
                 $claim = Claim::where("level", '2')->first();
-                event(new AssignClaimEvent($this->customer->id, $claim->id));
+                event(new AssignClaimEvent($this->customer->customer_id, $claim->id));
             }
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

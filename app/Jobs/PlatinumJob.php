@@ -48,7 +48,7 @@ class PlatinumJob implements ShouldQueue
 
             if($this->customer->checkmln) {
                 $claim = Claim::where("level", '7')->first();
-                event(new AssignClaimEvent($this->customer->id, $claim->id));
+                event(new AssignClaimEvent($this->customer->customer_id, $claim->id));
             }
             // job upliner of upliner
 

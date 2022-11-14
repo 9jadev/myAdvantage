@@ -37,8 +37,8 @@ class StarterJob implements ShouldQueue
     {
         Log::alert("Starter");
         Log::error($this->customer);
-        if(!$this->customer->checkmln) {
-            return; 
+        if (!$this->customer->checkmln) {
+            return;
         }
         $downliners = Customers::where("upliner", $this->customer->referral_code)->where("level", 1)->count();
         if ($downliners == 4) {
@@ -49,7 +49,7 @@ class StarterJob implements ShouldQueue
             // job upliner of upliner
             if ($this->customer->checkmln) {
                 $claim = Claim::where("level", '3')->first();
-                event(new AssignClaimEvent($this->customer->id, $claim->id));
+                event(new AssignClaimEvent($this->customer->customer_id, $claim->id));
             }
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

@@ -49,7 +49,7 @@ class GoldJob implements ShouldQueue
             // job upliner of upliner
             if($this->customer->checkmln) {
                 $claim = Claim::where("level", '6')->first();
-                event(new AssignClaimEvent($this->customer->id, $claim->id));
+                event(new AssignClaimEvent($this->customer->customer_id, $claim->id));
             }
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

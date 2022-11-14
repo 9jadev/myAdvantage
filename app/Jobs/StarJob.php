@@ -50,7 +50,7 @@ class StarJob implements ShouldQueue
             // job upliner of upliner
             if($this->customer->checkmln) {
                 $claim = Claim::where("level", '3')->first();
-                event(new AssignClaimEvent($this->customer->id, $claim->id));
+                event(new AssignClaimEvent($this->customer->customer_id, $claim->id));
             }
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

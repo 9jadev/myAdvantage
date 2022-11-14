@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\AssignClaim as AssignClaimEvent;
 use App\Jobs\StarterJob;
 use App\Models\Claim;
 use App\Models\Customers;
@@ -11,8 +12,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use App\Events\AssignClaim as AssignClaimEvent;
-
 
 class NewbiesJob implements ShouldQueue
 {
@@ -37,7 +36,7 @@ class NewbiesJob implements ShouldQueue
     public function handle()
     {
         Log::alert("Newbies");
-        Log::error($this->customer->id);
+        Log::error($this->customer->customer_id);
         if (!$this->customer->checkmln) {
             return;
         }
@@ -53,7 +52,7 @@ class NewbiesJob implements ShouldQueue
                 $claim = Claim::where("level", '1')->first();
                 logs()->alert("Claims " . $claim);
                 logs()->alert("Customers" . $this->customer);
-                event(new AssignClaimEvent($this->customer->id, $claim->id));
+                event(new AssignClaimEvent($this->customer->customer_id, $claim->id));
             }
             $upliner = Customers::where("upliner", $this->customer->upliner)->first();
             if ($upliner) {
