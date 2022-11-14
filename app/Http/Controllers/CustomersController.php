@@ -204,7 +204,7 @@ class CustomersController extends Controller
         return response()->json([
             "status" => "success",
             "required_downliners_level" => $downlevelcount,
-            "nextlevel" => request()->input('level') + 1,
+            "nextlevel" => intval(request()->input('level')) + 1,
             "percentage" => ($downlinelevel / 4) * 100,
         ], 200);
 
