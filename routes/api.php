@@ -54,7 +54,6 @@ Route::prefix('v1')->group(function () {
 
             Route::delete('delete/{claimid}', [ClaimController::class, 'delete'])->middleware(['auth:sanctum', 'type.admin']);
 
-
             Route::get('/list', [ClaimController::class, 'index'])->middleware(['auth:sanctum', 'type.admin']);
 
             Route::prefix('assignment')->group(function () {

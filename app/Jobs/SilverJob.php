@@ -38,6 +38,9 @@ class SilverJob implements ShouldQueue
     {
         Log::alert("Sliver");
         Log::error($this->customer->lastname);
+        if(!$this->customer->checkmln) {
+            return; 
+        }
         $downliners = Customers::where("upliner", $this->customer->referral_code)->where("level", 5)->count();
         if ($downliners == 4) {
             $this->customer->update([
@@ -45,10 +48,10 @@ class SilverJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
-
-            $claim = Claim::where("level", '5')->first();
-            event(new AssignClaimEvent($this->customer->id, $claim->id));
-
+            if($this->customer->checkmln) {
+                $claim = Claim::where("level", '5')->first();
+                event(new AssignClaimEvent($this->customer->id, $claim->id));
+            }
 
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {

@@ -36,6 +36,9 @@ class PlatinumJob implements ShouldQueue
     {
         Log::alert("Gold");
         Log::error($this->customer->lastname);
+        if(!$this->customer->checkmln) {
+            return; 
+        }
         $downliners = Customers::where("upliner", $this->customer->referral_code)->where("level", 7)->count();
         if ($downliners == 4) {
             $this->customer->update([
@@ -43,9 +46,10 @@ class PlatinumJob implements ShouldQueue
             ]);
             $this->customer->save();
 
-            $claim = Claim::where("level", '7')->first();
-            event(new AssignClaimEvent($this->customer->id, $claim->id));
-
+            if($this->customer->checkmln) {
+                $claim = Claim::where("level", '7')->first();
+                event(new AssignClaimEvent($this->customer->id, $claim->id));
+            }
             // job upliner of upliner
 
             // $upliner = Customers::where("upliner", $this->customers->upliner)->first();

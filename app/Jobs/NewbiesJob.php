@@ -37,6 +37,10 @@ class NewbiesJob implements ShouldQueue
     {
         Log::alert("Newbies");
         Log::error($this->customer);
+        if (!$this->customer->checkmln) {
+    return;
+}
+
         $downliners = Customers::where("upliner", $this->customer->referral_code)->count();
         if ($downliners == 4) {
             $this->customer->update([
@@ -44,9 +48,10 @@ class NewbiesJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
-            $claim = Claim::where("level", '1')->first();
-            event(new AssignClaimEvent($this->customer->id, $claim->id));
-
+            if($this->customer->checkmln) {
+                $claim = Claim::where("level", '1')->first();
+                event(new AssignClaimEvent($this->customer->id, $claim->id));
+            }
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {
                 StarterJob::dispatch($upliner)->delay(now()->addMinutes(1));

@@ -37,6 +37,10 @@ class StarJob implements ShouldQueue
     {
         Log::alert("Star");
         Log::error($this->customer->lastname);
+        if (!$this->customer->checkmln) {
+          return;
+        }
+
         $downliners = Customers::where("upliner", $this->customer->referral_code)->where("level", 3)->count();
         if ($downliners == 4) {
             $this->customer->update([
@@ -44,10 +48,10 @@ class StarJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
-
-            $claim = Claim::where("level", '3')->first();
-            event(new AssignClaimEvent($this->customer->id, $claim->id));
-
+            if($this->customer->checkmln) {
+                $claim = Claim::where("level", '3')->first();
+                event(new AssignClaimEvent($this->customer->id, $claim->id));
+            }
             $upliner = Customers::where("upliner", $this->customers->upliner)->first();
             if ($upliner) {
                 BronzeJob::dispatch($upliner)->delay(now()->addMinutes(1));
