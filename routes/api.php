@@ -121,6 +121,8 @@ Route::prefix('v1')->group(function () {
 
         Route::get('list/notification/markall', [CustomersController::class, 'markAllRead'])->middleware(['auth:sanctum', 'type.customer']);
 
+        Route::get('downliners/next', [CustomersController::class, 'downlinerLevels'])->middleware(['auth:sanctum', 'type.customer']);
+
         Route::post('register', [CustomersController::class, 'create']);
         Route::post('login', [CustomersController::class, 'login']);
         Route::post('forgotpassword', [CustomersController::class, 'forgotpassword']);

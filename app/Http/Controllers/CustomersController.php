@@ -189,6 +189,27 @@ class CustomersController extends Controller
         return response()->json(["status" => "success", "message" => "Password added successful"], 200);
     }
 
+    public function downlinerLevels()
+    {
+        // if (empty(request()->input('level')) && request()->input('level') !== 0) {
+        //     // $downlinelevel
+        //     return response()->json([
+        //         "status" => "error",
+        //         "message" => "Level is required",
+        //     ], 400);
+        // }
+        $downlevelcount = request()->input('level') == 0 ? request()->input('level') : request()->input('level');
+        $downlinelevel = Customers::where("level", $downlevelcount)->where("upliner", auth()->user()->referral_code)->count();
+
+        return response()->json([
+            "status" => "success",
+            "required_downliners_level" => $downlevelcount,
+            "nextlevel" => request()->input('level') + 1,
+            "percentage" => ($downlinelevel / 4) * 100,
+        ], 200);
+
+    }
+
     public function create(CreateCustomerRequest $request)
     {
         $data = $request->validated();
@@ -217,6 +238,7 @@ class CustomersController extends Controller
         $this->checkwallet($customers);
         $upliner = Customers::where("referral_code", $customers->upliner)->first();
         if ($upliner) {
+            logs()->info("Dispach");
             NewbiesJob::dispatch($upliner)->delay(now()->addMinutes(1));
         }
         return response()->json([

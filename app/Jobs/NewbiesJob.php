@@ -2,16 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Events\AssignClaim as AssignClaimEvent;
 use App\Jobs\StarterJob;
-use App\Models\Customers;
 use App\Models\Claim;
+use App\Models\Customers;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use App\Events\AssignClaim as AssignClaimEvent;
+
 
 class NewbiesJob implements ShouldQueue
 {
@@ -36,10 +37,10 @@ class NewbiesJob implements ShouldQueue
     public function handle()
     {
         Log::alert("Newbies");
-        Log::error($this->customer);
+        Log::error($this->customer->id);
         if (!$this->customer->checkmln) {
-    return;
-}
+            return;
+        }
 
         $downliners = Customers::where("upliner", $this->customer->referral_code)->count();
         if ($downliners == 4) {
@@ -48,11 +49,13 @@ class NewbiesJob implements ShouldQueue
             ]);
             $this->customer->save();
             // job upliner of upliner
-            if($this->customer->checkmln) {
+            if ($this->customer->checkmln) {
                 $claim = Claim::where("level", '1')->first();
+                logs()->alert("Claims " . $claim);
+                logs()->alert("Customers" . $this->customer);
                 event(new AssignClaimEvent($this->customer->id, $claim->id));
             }
-            $upliner = Customers::where("upliner", $this->customers->upliner)->first();
+            $upliner = Customers::where("upliner", $this->customer->upliner)->first();
             if ($upliner) {
                 StarterJob::dispatch($upliner)->delay(now()->addMinutes(1));
                 //move to starter

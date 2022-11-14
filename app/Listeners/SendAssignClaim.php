@@ -34,7 +34,8 @@ class SendAssignClaim
 
         $createAssign = ClaimAssignee::create($data);
         $customer = Customers::where("customer_id", $event->customer)->first();
-
+        logs()->info($event->customer);
+        // logs()->info("No")
         $customer->notify((new AssignClaimNotify($claim, $customer))->delay([
             'mail' => now()->addMinutes(2),
             'sms' => now()->addMinutes(3),
