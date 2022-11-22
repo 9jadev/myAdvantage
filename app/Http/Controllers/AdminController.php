@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admins;
 use App\Models\Customers;
+use App\Models\ClaimAssignee;
 use App\Models\Payments;
 use App\Models\Transactions;
 use App\Models\Walletlimit;
@@ -29,7 +30,13 @@ class AdminController extends Controller
             "silver_count" => $this->customerTypes(5),
             "gold_count" => $this->customerTypes(6),
             "platinum_count" => $this->customerTypes(7),
+            "claim_accessed" => $this->claimTypes(2),
+            "claim_unaccessed" => $this->claimTypes(0),
         ], 200);
+    }
+
+    private function claimTypes($status) {
+        return ClaimAssignee::where('status', $status)->count();
     }
 
     private function customerTypes($status)

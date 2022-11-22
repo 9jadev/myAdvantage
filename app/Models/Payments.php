@@ -35,7 +35,7 @@ class Payments extends Model
 
     public function plan()
     {
-        return $this->hasOne(Plans::class, "id", "plan_id");
+        return $this->hasOne(Plans::class, "id", "plan_id")->withTrashed();
     }
 
     public function customer()

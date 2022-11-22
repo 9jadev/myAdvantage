@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Plans\CreatePlanRequest;
 use App\Http\Requests\Plans\EditPlanRequest;
+use App\Models\Claim;
 use App\Models\ClaimPayment;
 use App\Models\Plans;
-use App\Models\Claim;
 
 class PlansController extends Controller
 {
@@ -49,7 +49,7 @@ class PlansController extends Controller
             $datavalue = [
                 "claim_id" => $value,
                 "plan_id" => $plan->id,
-                "type" => $claim->type
+                "type" => $claim->type,
             ];
             ClaimPayment::create($datavalue);
         }
@@ -57,6 +57,28 @@ class PlansController extends Controller
             "status" => "success",
             "message" => "Plan Created Successfully",
             "plan" => $plan,
+        ], 200);
+    }
+
+    public function delete()
+    {
+        if (request("id") == null) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Id is required",
+            ], 400);
+        }
+        $plan = Plans::where("id", request("id"))->first();
+        if (!$plan) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Plan not found",
+            ], 400);
+        }
+        $plan->delete();
+        return response()->json([
+            "status" => "success",
+            "message" => "Plan deleted successfully",
         ], 200);
     }
 }
