@@ -72,7 +72,7 @@ class PaymentsController extends Controller
 
         if ($payment->status == 0) {
             return response()->json([
-                "message" => "Payment not completed.",
+                "message" => "Payment not completed s.",
                 "payments" => $payment,
                 "status" => "error",
             ], 400);
