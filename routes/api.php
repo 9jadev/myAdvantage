@@ -150,6 +150,8 @@ Route::prefix('v1')->group(function () {
         Route::prefix('payments')->group(function () {
             Route::post('list', [PaymentsController::class, 'customerPaymentList'])->middleware(['auth:sanctum', 'type.customer']);
 
+            Route::post('invoice', [PaymentsController::class, 'paymentInvoice']);
+
             Route::post('generatewallet', [CustomersController::class, 'generateWallet'])->middleware(['auth:sanctum', 'type.customer']);
 
         });

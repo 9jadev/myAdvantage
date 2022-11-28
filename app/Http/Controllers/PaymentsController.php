@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Payments\ManualPaymentRequest;
 use App\Models\Payments;
+use PDF;
 
 class PaymentsController extends Controller
 {
@@ -55,6 +56,37 @@ class PaymentsController extends Controller
         }
         $payments = $payments->paginate($page_number);
         return response()->json(["message" => "Payments list", "payments" => $payments, "status" => "success", "desc" => "status description 0 awating payment , 1 completed 2 canceled"], 200);
+    }
+
+    public function paymentInvoice()
+    {
+        $id = request()->input("id");
+        $payment = Payments::where("id", $id)->first();
+        if (!$payment) {
+            return response()->json([
+                "message" => "Payment doesn't exist.",
+                "payments" => $payment,
+                "status" => "error",
+            ], 400);
+        }
+
+        if ($payment->status == 0) {
+            return response()->json([
+                "message" => "Payment not completed.",
+                "payments" => $payment,
+                "status" => "error",
+            ], 400);
+        }
+
+        $data = [
+            "id" => 12,
+            "ref" => "qedw",
+            "name" => "namw23",
+        ];
+        // view()->share('invoice',$data);
+        $pdf = PDF::loadView('invoice')->setPaper('A4')->stream();
+        // download PDF file with download method
+        return $pdf;
     }
 
 }
