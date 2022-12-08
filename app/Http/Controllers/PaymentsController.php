@@ -72,7 +72,7 @@ class PaymentsController extends Controller
 
         if ($payment->status == 0) {
             return response()->json([
-                "message" => "Payment not completed s.",
+                "message" => "Payment not completed.",
                 "payments" => $payment,
                 "status" => "error",
             ], 400);
@@ -83,7 +83,9 @@ class PaymentsController extends Controller
             "ref" => "qedw",
             "name" => "namw23",
         ];
-        // view()->share('invoice',$data);
+        // return view("invoice");
+
+        view()->share('invoice', $data);
         $pdf = PDF::loadView('invoice')->setPaper('A4')->stream();
         // download PDF file with download method
         return $pdf;

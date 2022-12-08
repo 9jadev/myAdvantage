@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
-<html><style>
+<html>
+<style>
     @font-face {
         font-family: Gilroy-Regular;
-        src: url('/../fonts/Gilroy-Regular.ttf');
+        src: url('../fonts/Gilroy-Regular.ttf');
     }
 </style>
     <head>
@@ -15,62 +17,56 @@
         <table border="0" cellpadding="0" cellspcaing="0" style="max-width:935px; width:100%; padding:15px; border: grey 1px solid;" align="center">
             <tr>
                 <td style="background-color: #ffffff; padding: 15px;" align="center" valign="middle">
-                    <h2 style="margin:0; font-family:Gilroy-Regular; font-size:40px;">INVOICE<br> <img src="{{ asset('images/logo-final.png') }}" /> <br></h2><span style=" margin:0;font-family:Gilroy-Regular; font-size:20px;">hello@myadvantage.africa, 09028947748</span>
+                    <h2 style="margin:0; font-family:Gilroy-Regular; font-size:40px;">INVOICE<br/>
+                    <img src="https://res.cloudinary.com/examqueat/image/upload/v1670423696/logo-final.png" /><br/></h2><span style=" margin:0;font-family:Gilroy-Regular; font-size:20px;">hello@myadvantage.africa, 09028947748</span>
                     
                 </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="middle">
-                        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #ffffff; border-bottom: grey 1px solid; padding-bottom: 15px;margin-bottom: 15px;">
-                            <tr>
-                                <td style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 620px; width: 100%">
-                                    Bill to:<br>
-3, Williams Street VI,<br>
-Lagos, Nigeria
+            </tr>
+            <tr>
+                
+            <tr style="width: 100%; background-color: #ffffff; border-bottom: grey 1px solid;">
+                <td style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 620px; width: 100%">
+                    Bill to:<br/>3, Williams Street VI,<br/>Lagos, Nigeria
 
-                                </td>
-                                 <td style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 270px; width: 100%">
-                                    Invoice# 1300<br><br>
+                </td>
+                <td style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 270px; width: 100%">
+                    Invoice# 1300<br/><br/>Date Issued 1/08/2022
+                </td>
+            </tr>
 
-                                    Date Issued 1/08/2022
+
+            <tr>
+                <td valign="top" align="middle">
+                    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #ffffff;  padding-bottom: 15px; ">
+                        <tr>
+                            <td  >
+                                <tr style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width:520px; width: 100%; border: grey 1px solid; margin-top: 130px;margin-right: 100px;">
+                                    <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%;">Item name</td>
+                                    <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%; text-align: center;">QTY</td>
+                                    <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%; text-align: right">Total</td>
+                                </tr>
+
+                            </td>
+                                <td style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 900px; width: 100%; text-align: right;">
+                                Total Due:<br/><br/><span style="font-size:40px;font-weight: bold;">5,000.00NGN</span>
+
+                                <tr></tr>
+        
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+
             
-                                            </td>
-                            </tr>
 
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="middle">
-                        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #ffffff;  padding-bottom: 15px; ">
-                            <tr>
-                                <td  >
-                                    <tr style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 520px; width: 100%; border: grey 1px solid; margin-top: 22px;
-    padding: 30px ;margin-right: 100px;">
-                                        <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%;">Item name</td>
-                                        <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%; text-align: center;">QTY</td>
-                                        <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%; text-align: right">Total</td>
-                                    </tr>
-
-                                    <tr style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 520px; width: 100%; border: grey 1px solid; margin-top: 22px;
-    padding: 30px ;margin-right: 100px;">
-                                        <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%;">Item name</td>
-                                        <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%; text-align: center;">QTY</td>
-                                        <td style="font-family:Gilroy-Regular; font-size:24px; max-width: 100px;width: 20%; text-align: right">Total</td>
-                                    </tr>
-
-                                </td>
-                                 <td style="display: inline-block; font-family:Gilroy-Regular; font-size:24px; max-width: 900px; width: 100%; text-align: right;">
-                                    Total Due:<br><br><span style="font-size:40px;font-weight: bold;">5,000.00NGN</span>
-
-                                    <tr></tr>
-            
-                                            </td>
-                            </tr>
-
-                        </table>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <hr />
+                </td>
+            </tr>
+           
         </table>
     </body>
 </html>

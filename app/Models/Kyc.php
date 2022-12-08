@@ -25,6 +25,8 @@ class Kyc extends Model
         "next_of_kin_name",
         "next_of_kin_phone_number",
         "vbank_account_number",
+        "pharmacy_location",
+        "pharmacy_name"
     ];
 
     public function customer()

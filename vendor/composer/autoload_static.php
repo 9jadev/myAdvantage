@@ -646,6 +646,7 @@ class ComposerStaticInitf2df89e3713e7a9aca7243927643ed84
         'App\\Models\\Customers' => __DIR__ . '/../..' . '/app/Models/Customers.php',
         'App\\Models\\Documents' => __DIR__ . '/../..' . '/app/Models/Documents.php',
         'App\\Models\\Faqs' => __DIR__ . '/../..' . '/app/Models/Faqs.php',
+        'App\\Models\\HelpCenter' => __DIR__ . '/../..' . '/app/Models/HelpCenter.php',
         'App\\Models\\Kyc' => __DIR__ . '/../..' . '/app/Models/Kyc.php',
         'App\\Models\\Payments' => __DIR__ . '/../..' . '/app/Models/Payments.php',
         'App\\Models\\Plans' => __DIR__ . '/../..' . '/app/Models/Plans.php',

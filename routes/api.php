@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\KycController;
+use App\Http\Controllers\HelpCenterController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PlansController;
 use App\Http\Controllers\TransactionsController;
@@ -143,6 +144,12 @@ Route::prefix('v1')->group(function () {
         Route::prefix('kyc')->group(function () {
             Route::post('create', [KycController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
         });
+
+        Route::prefix('help_center')->group(function () {
+            Route::post('create', [HelpCenterController::class, 'store'])->middleware(['auth:sanctum', 'type.customer']);
+            Route::post('list', [HelpCenterController::class, 'index'])->middleware(['auth:sanctum', 'type.customer']);
+        });
+
         Route::prefix('documents')->group(function () {
             Route::post('create', [DocumentsController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
         });
@@ -150,7 +157,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('payments')->group(function () {
             Route::post('list', [PaymentsController::class, 'customerPaymentList'])->middleware(['auth:sanctum', 'type.customer']);
 
-            Route::post('invoice', [PaymentsController::class, 'paymentInvoice']);
+            Route::get('invoice', [PaymentsController::class, 'paymentInvoice']);
 
             Route::post('generatewallet', [CustomersController::class, 'generateWallet'])->middleware(['auth:sanctum', 'type.customer']);
 
