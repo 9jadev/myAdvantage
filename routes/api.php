@@ -6,8 +6,8 @@ use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\FaqsController;
-use App\Http\Controllers\KycController;
 use App\Http\Controllers\HelpCenterController;
+use App\Http\Controllers\KycController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PlansController;
 use App\Http\Controllers\TransactionsController;
@@ -123,6 +123,8 @@ Route::prefix('v1')->group(function () {
         Route::get('list/notification/markall', [CustomersController::class, 'markAllRead'])->middleware(['auth:sanctum', 'type.customer']);
 
         Route::get('downliners/next', [CustomersController::class, 'downlinerLevels'])->middleware(['auth:sanctum', 'type.customer']);
+
+        Route::post('generateId', [CustomersController::class, 'generateId']);
 
         Route::post('register', [CustomersController::class, 'create']);
         Route::post('login', [CustomersController::class, 'login']);

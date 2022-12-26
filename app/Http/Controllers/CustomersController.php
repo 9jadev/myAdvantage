@@ -220,9 +220,18 @@ class CustomersController extends Controller
         return $this->store($data);
     }
 
+    private function generateId()
+    {
+        $contcustomer = Customers::count() + 1;
+        $contcustomers = str_pad("$contcustomer", 9, "0", STR_PAD_LEFT);
+        $pieces = str_split($contcustomers, 3);
+        $newstring = join("-", $pieces);
+        return "MYNG" . $newstring;
+    }
+
     private function store($data)
     {
-        $customer_id = "CUS_" . rand(10000, 99999) . date("YmdHis");
+        $customer_id = $this->generateId();
         $data = array_merge($data, [
             "status" => "0",
             "customer_id" => $customer_id,
