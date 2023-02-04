@@ -1,0 +1,50 @@
+server {
+    listen 80;
+
+    fastcgi_buffers 16 16k;
+    fastcgi_buffer_size 32k;
+
+    fastcgi_read_timeout 60;
+    fastcgi_connect_timeout 60;
+    fastcgi_send_timeout 60;
+
+    index index.php index.html;
+    error_log  /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+    root /var/www/${APP_WORKSPACE}/public;
+
+    location ~* \.(?:ico|gif|jpe?g|png|svg)$ {
+        expires 1d;
+        add_header Cache-Control "public";
+        add_header Vary Accept-Encoding;
+        access_log off;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass waec_cd_develop_app:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_read_timeout 300;
+    }
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+        gzip_static on;
+    }
+
+    # Enable Gzip for
+    gzip on;
+    gzip_http_version 1.1;
+    gzip_vary on;
+    gzip_comp_level 6;
+    gzip_min_length 1024;
+    gzip_proxied expired no-cache no-store private auth;
+    gzip_types image/jpeg image/png text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js;
+    gunzip on;
+    gzip_buffers 16 8k;
+    gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+}
+
