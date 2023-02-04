@@ -41,7 +41,7 @@ RUN update-ms-fonts \
 RUN apk add --update busybox-suid
 
 # prepare a user which runs everything locally!
-RUN adduser --disabled-password -s /bin/bash ${user}
+# RUN adduser --disabled-password -s /bin/bash ${user}
 
 # Install puppeteer
 RUN npm install --global --unsafe-perm puppeteer
