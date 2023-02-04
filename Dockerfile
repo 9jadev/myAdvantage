@@ -72,4 +72,6 @@ WORKDIR /var/www
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
-CMD ["start.sh"]
+# CMD ["start.sh"]
+
+CMD sh arch/scripts/start.sh
