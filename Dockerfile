@@ -18,11 +18,11 @@ RUN cd /app && \
 
 RUN chown -R www-data: /app
 
-ENV DB_SOCKET /cloudsql/mylabscloud:europe-west1:myadvantage
+ENV DB_SOCKET /cloudsql/mylabscloud:europe-west1:appdb
 ENV DB_HOST 127.0.0.1
 ENV DB_USERNAME root
 ENV DB_PORT 3306
-ENV DB_PASSWORD .(]epm?(:LJpp8_j
+ENV DB_PASSWORD password123
 ENV DB_DATABASE myadvantage
 
 RUN cd /app && php artisan migrate --force
