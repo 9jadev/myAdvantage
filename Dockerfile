@@ -25,10 +25,10 @@ ENV DB_PORT 3306
 ENV DB_PASSWORD password123
 ENV DB_DATABASE myadvantage
 
-RUN cd /app && php artisan migrate --force
-RUN php artisan db:seed --force
-RUN php artisan vendor:publish --tag=public --force
-RUN php artisan storage:link
+# RUN cd /app && php artisan migrate --force
+# RUN php artisan db:seed --force
+# RUN php artisan vendor:publish --tag=public --force
+# RUN php artisan storage:link
 
 
 # g
