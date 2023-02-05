@@ -23,6 +23,7 @@ ENV DB_HOST 34.77.38.136
 ENV DB_USERNAME root
 ENV DB_PORT 3306
 ENV DB_PASSWORD .(]epm?(:LJpp8_j
+ENV DB_DATABASE myadvantage
 
 RUN cd /app && php artisan migrate --force
 RUN php artisan db:seed --force
