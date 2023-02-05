@@ -21,10 +21,4 @@ ENV DB_USERNAME root
 ENV DB_PORT 3306
 ENV DB_PASSWORD .(]epm?(:LJpp8_j
 
-RUN php artisan migrate --force
-RUN php artisan db:seed --force
-RUN php artisan vendor:publish --tag=public --force
-RUN php artisan storage:link
-
-
 CMD sh /app/docker/startup.sh
