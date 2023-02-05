@@ -15,4 +15,10 @@ RUN cd /app && \
 
 RUN chown -R www-data: /app
 
+RUN php artisan migrate --force
+RUN php artisan db:seed --force
+RUN php artisan vendor:publish --tag=public --force
+RUN php artisan storage:link
+
+
 CMD sh /app/docker/startup.sh

@@ -1,5 +1,10 @@
 runtime: php8  # language of the app
 env: flex     # let app engine know we use flexible environment
+
+.(]epm?(:LJpp8_j
+
+/cloudsql/betascore-development:us-central1:betascore-dev
+
 runtime_config:
  document_root: public   #folder where index.php is
 # Ensure we skip ".env", which is only for local development
