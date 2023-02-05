@@ -15,6 +15,12 @@ RUN cd /app && \
 
 RUN chown -R www-data: /app
 
+ENV DB_SOCKET /cloudsql/mylabscloud:europe-west1:myadvantage
+ENV DB_HOST 34.77.38.136
+ENV DB_USERNAME root
+ENV DB_PORT 3306
+ENV DB_PASSWORD .(]epm?(:LJpp8_j
+
 RUN php artisan migrate --force
 RUN php artisan db:seed --force
 RUN php artisan vendor:publish --tag=public --force
