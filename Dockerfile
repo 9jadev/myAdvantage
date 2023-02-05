@@ -31,4 +31,6 @@ RUN php artisan vendor:publish --tag=public --force
 RUN php artisan storage:link
 
 
+# g
+
 CMD sh /app/docker/startup.sh
