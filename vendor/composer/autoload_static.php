@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf2df89e3713e7a9aca7243927643ed84
+class ComposerStaticInitc2fc9866299d26c61c68700b509986a7
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -200,8 +200,8 @@ class ComposerStaticInitf2df89e3713e7a9aca7243927643ed84
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'Whoops\\' => 
         array (
@@ -377,8 +377,8 @@ class ComposerStaticInitf2df89e3713e7a9aca7243927643ed84
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -595,6 +595,7 @@ class ComposerStaticInitf2df89e3713e7a9aca7243927643ed84
         'App\\Http\\Controllers\\CustomersController' => __DIR__ . '/../..' . '/app/Http/Controllers/CustomersController.php',
         'App\\Http\\Controllers\\DocumentsController' => __DIR__ . '/../..' . '/app/Http/Controllers/DocumentsController.php',
         'App\\Http\\Controllers\\FaqsController' => __DIR__ . '/../..' . '/app/Http/Controllers/FaqsController.php',
+        'App\\Http\\Controllers\\HelpCenterController' => __DIR__ . '/../..' . '/app/Http/Controllers/HelpCenterController.php',
         'App\\Http\\Controllers\\KycController' => __DIR__ . '/../..' . '/app/Http/Controllers/KycController.php',
         'App\\Http\\Controllers\\PaymentsController' => __DIR__ . '/../..' . '/app/Http/Controllers/PaymentsController.php',
         'App\\Http\\Controllers\\PlansController' => __DIR__ . '/../..' . '/app/Http/Controllers/PlansController.php',
@@ -638,6 +639,7 @@ class ComposerStaticInitf2df89e3713e7a9aca7243927643ed84
         'App\\Jobs\\StarterJob' => __DIR__ . '/../..' . '/app/Jobs/StarterJob.php',
         'App\\Listeners\\SendAssignClaim' => __DIR__ . '/../..' . '/app/Listeners/SendAssignClaim.php',
         'App\\Mail\\ForgotPassword' => __DIR__ . '/../..' . '/app/Mail/ForgotPassword.php',
+        'App\\Mail\\HelpCenterMail' => __DIR__ . '/../..' . '/app/Mail/HelpCenterMail.php',
         'App\\Models\\Admins' => __DIR__ . '/../..' . '/app/Models/Admins.php',
         'App\\Models\\Claim' => __DIR__ . '/../..' . '/app/Models/Claim.php',
         'App\\Models\\ClaimAssignee' => __DIR__ . '/../..' . '/app/Models/ClaimAssignee.php',
@@ -6173,10 +6175,10 @@ class ComposerStaticInitf2df89e3713e7a9aca7243927643ed84
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf2df89e3713e7a9aca7243927643ed84::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf2df89e3713e7a9aca7243927643ed84::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitf2df89e3713e7a9aca7243927643ed84::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitf2df89e3713e7a9aca7243927643ed84::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc2fc9866299d26c61c68700b509986a7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc2fc9866299d26c61c68700b509986a7::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitc2fc9866299d26c61c68700b509986a7::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitc2fc9866299d26c61c68700b509986a7::$classMap;
 
         }, null, ClassLoader::class);
     }
