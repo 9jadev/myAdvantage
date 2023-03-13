@@ -12,6 +12,7 @@
         "clarification/sendgrid-laravel-driver": "^2.0",
         "darkaonline/l5-swagger": "8.0.7",
         "guzzlehttp/guzzle": "^7.2",
+        "kreait/laravel-firebase": "*",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.7",

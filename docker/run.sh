@@ -2,7 +2,7 @@
 
 cd /var/www
 
-php artisan migrate:fresh --seed
+php artisan migrate --force
 php artisan db:seed
 
 # php artisan cache:clear
