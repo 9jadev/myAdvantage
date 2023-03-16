@@ -7,6 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+ssh://tosfuner@tosfunerals.com/home/tosfuner/backendapi.tosfunerals.com
 
 git remote add origin ssh://tosfuner@tosfunerals.com/home/tosfuner/backendapi.tosfunerals.com
 git push -u origin master
