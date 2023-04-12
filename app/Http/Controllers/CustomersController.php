@@ -300,7 +300,7 @@ class CustomersController extends Controller
 
             $claim = Claim::where("id", $value["id"])->first();
 
-            auth()->user()->notify((new AssignClaimNotify($claim, auth()->user()))->delay([
+            $customer->notify((new AssignClaimNotify($claim, $customer))->delay([
                 'mail' => now()->addMinutes(2),
                 'sms' => now()->addMinutes(3),
             ]));
