@@ -40,7 +40,7 @@ class UpdateKycRequest extends FormRequest
             "allergy" => "required|string",
             "next_of_kin_name" => "required|string",
             "next_of_kin_phone_number" => "required|string",
-            "vbank_account_number" => "required|string",
+            // "vbank_account_number" => "required|string",
             "pharmacy_location" => "required|string",
             "pharmacy_name" => "required|string",
         ];
