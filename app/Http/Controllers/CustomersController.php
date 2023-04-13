@@ -59,14 +59,17 @@ class CustomersController extends Controller
     public function index()
     {
         $page_number = request()->input("page_number");
-        $customers = Customers::latest()->select(["customer_id",
-            "upliner",
-            "id",
-            "referral_code",
-            "firstname",
-            "created_at",
-            "phone_number",
-            "lastname"])->paginate($page_number);
+        $query = Customers::whereNotNull("customers.id");
+        $searchText = request()->query("search_text");
+        $searchText ? $query->where("firstname",'LIKE', "%{$$searchText}%")->orWhere("lastname",'LIKE', "%{$$searchText}%") : $query;
+        $customers = $query->latest()->select(["customer_id",
+        "upliner",
+        "id",
+        "referral_code",
+        "firstname",
+        "created_at",
+        "phone_number",
+        "lastname"])->paginate($page_number);
         return response()->json(["message" => "Customer list", "customer" => $customers, "status" => "success"], 200);
     }
 
