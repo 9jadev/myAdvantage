@@ -35,7 +35,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN chown -R www-data: /var/www/app
+RUN chown -R www-data: /var/www
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
