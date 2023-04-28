@@ -35,7 +35,19 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# RUN chown -R www-data: /var/www
+# Add user for laravel application
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
+
+# Copy code to /var/www
+COPY --chown=www:www-data . /var/www
+
+# add root to www group
+RUN chmod  777 -R /var/www/storage /var/www/bootstrap/cache
+# chmod -R 775 storage bootstrap/cache
+
+# RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
 
 # Copy nginx/php/supervisor configs
 RUN cp docker/supervisor.conf /etc/supervisord.conf
