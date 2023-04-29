@@ -43,7 +43,7 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 COPY --chown=www:www-data . /var/www
 
 # add root to www group
-# RUN chmod  777 -R /var/www/storage /var/www/bootstrap/cache
+RUN chmod  777 -R /var/www/storage /var/www/bootstrap/cache
 # chmod -R 775 storage bootstrap/cache
 
 # RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
