@@ -46,7 +46,9 @@ COPY --chown=www:www-data . /var/www
 # RUN chmod  777 -R /var/www/storage /var/www/bootstrap/cache
 # chmod -R 775 storage bootstrap/cache
 
-# RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+RUN chown -R :www-data /var/www
+
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 
 # Copy nginx/php/supervisor configs
