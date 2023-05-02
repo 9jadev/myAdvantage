@@ -26,7 +26,7 @@ RUN chmod 777 -R /var/www/storage/ && \
   chown -R www-data:www-data /var/www/ && \
   a2enmod rewrite
 
-RUN supervisorctl reread
-RUN supervisorctl update
+# RUN supervisorctl reread
+# RUN supervisorctl update
 RUN supervisorctl start laravel-worker:*
 
