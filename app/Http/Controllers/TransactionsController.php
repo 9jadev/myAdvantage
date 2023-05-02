@@ -47,7 +47,7 @@ class TransactionsController extends Controller
     public function create(Request $request)
     {
         if (!$request->amount) {
-            return response()->json(["message" => "Amount is required"]);
+            return response()->json(["message" => "Amount is required"], 400);
         }
         $with = Walletlimit::first();
         if ($request->amount > $with->max_top_up) {

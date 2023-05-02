@@ -1,62 +1,26 @@
-FROM php:8.1-fpm
+# Dockerfile
+#latest composer to get the dependencies
+FROM composer:2.3.10 as build
+WORKDIR /app
+COPY . /app
+RUN composer install && composer dumpautoload
+RUN php artisan optimize:clear
 
-# Set working directory
-WORKDIR /var/www
+#PHP Apache docker image for php8.1
+FROM php:8.1.0RC5-apache-buster
+#adds library support for different image upload
+RUN apt update && apt install -y zlib1g-dev libpng-dev libwebp-dev libjpeg-dev libfreetype6-dev && rm -rf /var/lib/apt/lists/*
 
-# Add docker php ext repo
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN docker-php-ext-install pdo pdo_mysql
+#adds gd library support for different image upload
+RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
+RUN docker-php-ext-install gd
 
-# Install php extensions
-RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    unzip \
-    git \
-    curl \
-    lua-zlib-dev \
-    libmemcached-dev \
-    nginx
-
-# Install supervisor
-RUN apt-get install -y supervisor
-
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy code to /var/www
-COPY --chown=www:www-data . /var/www
-
-# add root to www group
-RUN chmod -R ug+w /var/www/storage
-
-# Copy nginx/php/supervisor configs
-RUN cp docker/supervisor.conf /etc/supervisord.conf
-RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
-RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
-
-# PHP Error Log Files
-RUN mkdir /var/log/php
-RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
-
-# Deployment steps
-RUN composer install --optimize-autoloader --no-dev
-RUN chmod +x /var/www/docker/run.sh
-
+#000-default.conf is used to configure the web-server to listen to port 80 which Cloud run requires
 EXPOSE 80
-ENTRYPOINT ["/var/www/docker/run.sh"]
+COPY --from=build /app /var/www/
+COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN chmod 777 -R /var/www/storage/ && \
+  echo "Listen 8080">>/etc/apache2/ports.conf && \
+  chown -R www-data:www-data /var/www/ && \
+  a2enmod rewrite
