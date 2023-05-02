@@ -10,7 +10,7 @@ RUN php artisan optimize:clear
 FROM php:8.1.0RC5-apache-buster
 #adds library support for different image upload
 RUN apt update && apt install -y zlib1g-dev libpng-dev libwebp-dev libjpeg-dev libfreetype6-dev && rm -rf /var/lib/apt/lists/*
-RUN apt-get install supervisor
+RUN apt install supervisor
 RUN docker-php-ext-install pdo pdo_mysql
 #adds gd library support for different image upload
 RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
