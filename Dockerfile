@@ -3,7 +3,7 @@
 FROM composer:2.3.10 as build
 WORKDIR /app
 COPY . /app
-RUN composer install && composer dumpautoload
+RUN composer install --ignore-platform-reqs  && composer dumpautoload
 RUN php artisan optimize:clear
 
 #PHP Apache docker image for php8.1
