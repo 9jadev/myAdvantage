@@ -25,3 +25,8 @@ RUN chmod 777 -R /var/www/storage/ && \
   echo "Listen 8080">>/etc/apache2/ports.conf && \
   chown -R www-data:www-data /var/www/ && \
   a2enmod rewrite
+
+RUN supervisorctl reread
+RUN supervisorctl update
+RUN supervisorctl start laravel-worker:*
+
