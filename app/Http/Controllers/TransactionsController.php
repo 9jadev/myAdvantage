@@ -50,7 +50,7 @@ class TransactionsController extends Controller
             return response()->json(["message" => "Amount is required"], 400);
         }
         $with = Walletlimit::first();
-        if ($request->amount > $with->max_top_up) {
+        if ($request->amount > $with?->max_top_up) {
             return response()->json(["message" => "Amount should be more than " . $with->max_top_up, "status" => "error"], 400);
         }
         return $this->store($request);
