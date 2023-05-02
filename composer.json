@@ -7,7 +7,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2.5",
+        "php": "^8.1.0",
         "barryvdh/laravel-dompdf": "^2.0",
         "clarification/sendgrid-laravel-driver": "^2.0",
         "darkaonline/l5-swagger": "8.0.7",
