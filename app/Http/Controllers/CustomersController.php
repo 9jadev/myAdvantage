@@ -278,6 +278,7 @@ class CustomersController extends Controller
     private function updatepaymentSuccessful(Payments $payment)
     {
         // return $payment;
+        logs()->info(request()["data"]["tx_ref"]);
         $plan = Plans::where("id", $payment->plan_id)->first();
         $newDateTime = Carbon::now()->addDay($plan->pay_days);
         $customer = Customers::where("customer_id", $payment->customer_id)->first();
@@ -303,11 +304,17 @@ class CustomersController extends Controller
             // event(new AssignClaimEvent(auth()->user()->customer_id, $dd["claim_id"]));
 
             $claim = Claim::where("id", $value["id"])->first();
+            logs()->info($customer);
 
-            $customer->notify((new AssignClaimNotify($claim, $customer))->delay([
-                'mail' => now()->addMinutes(2),
-                // 'sms' => now()->addMinutes(3),
-            ]));
+            try {
+                $customer->notify((new AssignClaimNotify($claim, $customer))->delay([
+                    'mail' => now()->addMinutes(2),
+                    // 'sms' => now()->addMinutes(3),
+                ]));
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+
 
         }
         return response()->json([
@@ -412,12 +419,12 @@ class CustomersController extends Controller
     public function paymentWebhook(WalletService $walletService)
     {
         if (request()->header('verif-hash') == "1234567890") {
-            Log::info(request()->header('verif-hash'));
-            // return;
+
             if (request()->event == "charge.completed") {
-                logs()->info(request()["data"]["tx_ref"]);
+
                 $payment = Payments::where("reference", request()["data"]["tx_ref"])->first();
                 if ($payment) {
+
                     return $this->verifyPayments(request()["data"]["tx_ref"]);
                 }
                 return $walletService->verifyPayments();
