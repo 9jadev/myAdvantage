@@ -17,14 +17,15 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
 RUN docker-php-ext-install gd
 
-RUN php artisan migrate --force
-RUN php artisan db:seed --force
-
 #000-default.conf is used to configure the web-server to listen to port 80 which Cloud run requires
 EXPOSE 80
 COPY --from=build /app /var/www/
 COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/laravel-worker.conf /etc/supervisor/conf.d
+
+RUN php /var/www artisan migrate --force
+RUN php /var/www artisan db:seed --force
+
 RUN chmod 777 -R /var/www/storage/ && \
   echo "Listen 8080">>/etc/apache2/ports.conf && \
   chown -R www-data:www-data /var/www/ && \
