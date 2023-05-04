@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . /app
 RUN composer install --ignore-platform-reqs  && composer dumpautoload
 RUN php artisan optimize:clear
-RUN php artisan migrate --force
+
 
 #PHP Apache docker image for php8.1
 FROM php:8.1.0RC5-apache-buster
@@ -16,6 +16,9 @@ RUN docker-php-ext-install pdo pdo_mysql
 #adds gd library support for different image upload
 RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
 RUN docker-php-ext-install gd
+
+RUN php artisan migrate --force
+RUN php artisan db:seed --force
 
 #000-default.conf is used to configure the web-server to listen to port 80 which Cloud run requires
 EXPOSE 80
