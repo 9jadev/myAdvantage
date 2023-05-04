@@ -22,7 +22,7 @@ class CreateTransaction
                 "currency": "NGN",
                 "reference" : ' . $transactions->reference . ',
                 "debit_currency" : "NGN",
-		}');
+	    	}');
             $responseData = $response->json();
             Log::error($responseData);
             if ($responseData["status"] == "success") {
@@ -39,14 +39,15 @@ class CreateTransaction
                 return response()->json([
                     "message" => $responseData["message"],
                     "status" => "error",
-                ], 200);
+                ], 400);
             }
         } catch (\Throwable$th) {
             Log::error($th);
             return response()->json([
                 "message" => "Error Occoured",
                 "status" => "error",
-            ], 200);
+                "error" => $th
+            ], 400);
         }
 
     }
