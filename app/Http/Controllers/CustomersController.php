@@ -7,6 +7,7 @@ use App\Http\Requests\Customers\CreatePasswordRequest;
 use App\Http\Requests\Customers\LoginCustomerRequest;
 use App\Http\Requests\Customers\UpdateCustomerRequest;
 use App\Http\Requests\Customers\UploadProfileRequest;
+use App\Services\WalletService;
 use App\Jobs\NewbiesJob;
 use App\Mail\ForgotPassword;
 use App\Models\Claim;
@@ -408,7 +409,7 @@ class CustomersController extends Controller
     }
 
 
-    public function paymentWebhook()
+    public function paymentWebhook(WalletService $walletService)
     {
         if (request()->header('verif-hash') == "1234567890") {
             Log::info(request()->header('verif-hash'));
@@ -419,7 +420,7 @@ class CustomersController extends Controller
                 if ($payment) {
                     return $this->verifyPayments(request()["data"]["tx_ref"]);
                 }
-
+                return $walletService->verifyPayments();
             }
         }
     }
