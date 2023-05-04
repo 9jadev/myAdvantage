@@ -169,7 +169,7 @@ Route::prefix('v1')->group(function () {
             Route::post('fund', [TransactionsController::class, 'create'])->middleware(['auth:sanctum', 'type.customer']);
             Route::get('verify', [TransactionsController::class, 'verifyPayments'])->middleware(['auth:sanctum', 'type.customer']);
             Route::get('banks', [TransactionsController::class, 'listBanks'])->middleware(['auth:sanctum', 'type.customer']);
-            Route::post('webhook', [TransactionsController::class, 'paymentWebhook']);
+            Route::post('webhook', [CustomersController::class, 'paymentWebhook']);
             Route::get('transactions', [TransactionsController::class, 'index'])->middleware(['auth:sanctum', 'type.customer']);
 
             Route::prefix('transfer')->group(function () {

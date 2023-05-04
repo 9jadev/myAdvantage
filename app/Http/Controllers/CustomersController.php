@@ -338,9 +338,9 @@ class CustomersController extends Controller
         return response()->json(["message" => "Verifcation success", "status" => "success"], 200);
     }
 
-    public function verifyPayments()
+    public function verifyPayments($ref = null)
     {
-        $ref = request()->ref;
+        $ref = $ref == null ? request()->ref : $ref;
         if (!$ref) {
             return response()->json([
                 "message" => "Reference is required",
@@ -406,6 +406,24 @@ class CustomersController extends Controller
         }
 
     }
+
+
+    public function paymentWebhook()
+    {
+        if (request()->header('verif-hash') == "1234567890") {
+            Log::info(request()->header('verif-hash'));
+            // return;
+            if (request()->event == "charge.completed") {
+                logs()->info(request()["data"]["tx_ref"]);
+                $payment = Payments::where("reference", request()["data"]["tx_ref"])->first();
+                if ($payment) {
+                    return $this->verifyPayments(request()["data"]["tx_ref"]);
+                }
+
+            }
+        }
+    }
+
 
     /**
      *  @OA\Post(
