@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . /app
 RUN composer install --ignore-platform-reqs  && composer dumpautoload
 RUN php artisan optimize:clear
+RUN php artisan migrate
 
 #PHP Apache docker image for php8.1
 FROM php:8.1.0RC5-apache-buster
@@ -25,7 +26,6 @@ RUN chmod 777 -R /var/www/storage/ && \
   echo "Listen 8080">>/etc/apache2/ports.conf && \
   chown -R www-data:www-data /var/www/ && \
   a2enmod rewrite
-CMD /var/www php artisan migrate
 # RUN supervisorctl reread
 # RUN supervisorctl update
 RUN supervisorctl start laravel-worker:*
