@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . /app
 RUN composer install --ignore-platform-reqs  && composer dumpautoload
 RUN php artisan optimize:clear
-RUN php artisan migrate
+RUN php artisan migrate --force
 
 #PHP Apache docker image for php8.1
 FROM php:8.1.0RC5-apache-buster
