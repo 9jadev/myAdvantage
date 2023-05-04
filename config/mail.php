@@ -114,6 +114,6 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
-    'helpmail' => env('HELP_MAIL', 'wincekwe@eocmd.com'),
+    'helpmail' => env('HELP_MAIL', 'noreply@myadvantage.africa'),
 
 ];

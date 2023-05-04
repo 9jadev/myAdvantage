@@ -364,7 +364,7 @@ class CustomersController extends Controller
         }
 
         if ($payment->status == '1') {
-            return response()->json(["message" => "Payment Already Verified", "status" => "error"], 400);
+            return response()->json(["message" => "Payment Already Verified", "status" => "error"], 200);
 
         }
 
