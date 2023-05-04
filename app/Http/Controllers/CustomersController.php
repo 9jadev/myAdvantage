@@ -306,7 +306,7 @@ class CustomersController extends Controller
 
             $customer->notify((new AssignClaimNotify($claim, $customer))->delay([
                 'mail' => now()->addMinutes(2),
-                'sms' => now()->addMinutes(3),
+                // 'sms' => now()->addMinutes(3),
             ]));
 
         }
