@@ -18,7 +18,6 @@ class PlansController extends Controller
             "message" => "Plans Fetched Successfully",
             "plan" => $plans,
         ], 200);
-
     }
 
     public function create(CreatePlanRequest $request)

@@ -10,7 +10,7 @@ class Plans extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = "plans";
-    // protected $with = ["claims"];
+    protected $with = ["claims"];
     protected $fillable = [
         "plan_name",
         "tenor",
