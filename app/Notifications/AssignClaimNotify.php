@@ -45,7 +45,7 @@ class AssignClaimNotify extends Notification
             ->subject('New claim')
             ->greeting('Hello ' . $this->customer["firstname"] . ' ' . $this->customer["lastname"])
             // ->action('Notification Action', url('/'))
-            ->line('Congratulations a claim has been assigned to you.');
+            ->line('Your health claim has been assigned to you.  You can now consult with a medical provider free of charge and get any prescribed medications for free as well.');
     }
 
     /**
